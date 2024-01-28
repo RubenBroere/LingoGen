@@ -13,6 +13,8 @@
     <ItemGroup>
         <None Remove="DDD.UbiquitousLanguageRegistry.txt"/>
         <AdditionalFiles Include="DDD.UbiquitousLanguageRegistry.txt"/>
+        <None Remove="lingo.json" />
+        <AdditionalFiles Include="lingo.json" />
     </ItemGroup>
 
 </Project>

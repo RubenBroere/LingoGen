@@ -1,0 +1,12 @@
+﻿{
+  "Entries": {
+    "test": {
+      "en": "hello",
+      "dutch": "hallo2"
+    },
+    "test2": {
+      "en": "hello",
+      "dutch": "hallo2"
+    }
+  }
+}
