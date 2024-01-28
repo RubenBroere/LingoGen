@@ -1,12 +1,12 @@
 ﻿{
   "Entries": {
-    "test": {
-      "en": "hello",
-      "dutch": "hallo2"
+    "Hello": {
+      "en": "Hello",
+      "nl": "Hallo"
     },
-    "test2": {
-      "en": "hello",
-      "dutch": "hallo2"
+    "World": {
+      "en": "World",
+      "nl": "Wereld"
     }
   }
 }
