@@ -1,5 +1,8 @@
 ﻿namespace LingoGen.Sample;
 
-public class Sample
+public static class Program
 {
+    public static void Main()
+    {
+    }
 }
