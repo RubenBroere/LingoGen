@@ -1,20 +1,28 @@
 ﻿{
-  "Entries": {
-    "Hello": {
-      "en": "Hello",
-      "nl": "Hallo"
+  "Hello": {
+    "en": "Hello",
+    "nl": "Hallo"
+  },
+  "World": {
+    "en": "World",
+    "nl": "Wereld"
+  },
+  "Bicycle〱Two": {
+    "en": "Bicycle",
+    "nl": "Fiets"
+  },
+  "Bicycle〱One": {
+    "en": "Bicycle",
+    "nl": "Fiets"
+  },
+  "Finance": {
+    "Invoice": {
+      "en": "Invoice",
+      "nl": "Factuur"
     },
-    "World": {
-      "en": "World",
-      "nl": "Wereld"
-    },
-    "Bicycle〱Two": {
-      "en": "Bicycle",
-      "nl": "Fiets"
-    },
-    "Bicycle〱One": {
-      "en": "Bicycle",
-      "nl": "Fiets"
+    "Currency": {
+      "en": "Currency",
+      "nl": "Valuta"
     }
   }
 }

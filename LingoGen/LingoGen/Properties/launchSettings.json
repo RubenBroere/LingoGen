@@ -3,7 +3,7 @@
   "profiles": {
     "DebugRoslynSourceGenerator": {
       "commandName": "DebugRoslynComponent",
-      "targetProject": "../LingoGen.Sample/LingoGen.Sample.csproj"
+      "targetProject": "../../LingoGen.Console/LingoGen.Console.csproj"
     }
   }
 }

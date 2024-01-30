@@ -1,7 +1,8 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
+
 using LingoGen;
 
-Console.WriteLine($"{Lingo.Hello}, {Lingo.World}!");
+var x = Lingo.Finance.Currency;
 
-Console.WriteLine(Lingo.Bicycle〱One);
+Console.WriteLine("Hello World!");
