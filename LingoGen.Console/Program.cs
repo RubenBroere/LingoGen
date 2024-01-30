@@ -4,4 +4,4 @@ using LingoGen;
 
 Console.WriteLine($"{Lingo.Hello}, {Lingo.World}!");
 
-Console.WriteLine(Lingo.Bicycle);
+Console.WriteLine(Lingo.Bicycle〱One);

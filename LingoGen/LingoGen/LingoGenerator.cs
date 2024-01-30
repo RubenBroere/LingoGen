@@ -63,7 +63,7 @@ public class LingoGenerator : IIncrementalGenerator
                   public static string {{entry.Key}} => CultureInfo.CurrentUICulture.TwoLetterISOLanguageName switch
                   {
               {{translations}}
-                      _ => $"{CultureInfo.CurrentUICulture.TwoLetterISOLanguageName}:{{entry.Key}}"
+                      _ => $"[ No '{{entry.Key}}' lingo for '{CultureInfo.CurrentUICulture.TwoLetterISOLanguageName}' ]"
                   };
               }
               """;
