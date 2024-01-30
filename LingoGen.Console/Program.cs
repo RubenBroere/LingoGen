@@ -3,6 +3,5 @@
 
 using LingoGen;
 
-var x = Lingo.Finance.Currency;
 
 Console.WriteLine("Hello World!");

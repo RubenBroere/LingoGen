@@ -1,46 +1,34 @@
 ﻿using System;
 using System.Collections.Generic;
-using Microsoft.CodeAnalysis;
+using System.Linq;
 using Newtonsoft.Json.Linq;
 
 namespace LingoGen;
 
 public static class LingoEntryParser
 {
-    public static IncrementalValuesProvider<LingoEntry> ParseLingo(IncrementalValuesProvider<string> jsons)
+    public static IEnumerable<LingoEntry> ParseLingo(string json)
     {
-        var jsonProperties = jsons
-            .SelectMany(static (text, _) => JObject.Parse(text).Properties())
-            .WithComparer(new JTokenEqualityComparer());
-
-        var lingoEntries = jsonProperties
-            .SelectMany(static (jProperty, _) => ParseLingo(jProperty))
-            .WithComparer(new LingoEntryComparer());
-
-        return lingoEntries;
+        return JObject.Parse(json).Properties().SelectMany(ParseLingo);
     }
     
     private static IEnumerable<LingoEntry> ParseLingo(JProperty jProperty)
     {
-        var entries = new List<LingoEntry>();
         try
         {
             var entry = jProperty.Value.ToObject<Dictionary<string, string>>();
 
             if (entry is not null)
-                entries.Add(new(jProperty.Path, entry));
+                return new[] { new LingoEntry(jProperty.Path, entry) };
         }
         catch (Exception)
         {
             if (jProperty.Value is JObject jObject)
             {
-                foreach (var property in jObject.Properties())
-                {
-                    entries.AddRange(ParseLingo(property));
-                }
+                return jObject.Properties().SelectMany(ParseLingo);
             }
         }
 
-        return entries;
+        return Enumerable.Empty<LingoEntry>();
     }
 }
