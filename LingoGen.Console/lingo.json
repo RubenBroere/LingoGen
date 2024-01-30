@@ -7,6 +7,14 @@
     "World": {
       "en": "World",
       "nl": "Wereld"
+    },
+    "Bicycle": {
+      "en": "Bicycle",
+      "nl": "Fiets"
+    },
+    "Bicycle2": {
+      "en": "Bicycle",
+      "nl": "Fiets"
     }
   }
 }
