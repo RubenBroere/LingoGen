@@ -2,7 +2,7 @@
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Text.Json;
+using Newtonsoft.Json;
 using System.Threading;
 using Microsoft.CodeAnalysis;
 
@@ -87,8 +87,8 @@ public class LingoGenerator : IIncrementalGenerator
 
         if (json is null)
             return null;
-
-        var lingoJson = JsonSerializer.Deserialize<LingoJson>(json.ToString());
+        
+        var lingoJson = JsonConvert.DeserializeObject<LingoJson>(json.ToString());
 
         return lingoJson ?? null;
     }
