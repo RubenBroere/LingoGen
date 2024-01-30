@@ -23,7 +23,12 @@ public class LingoGenerator : IIncrementalGenerator
 
           public static partial class Lingo
           {
-              private static string _currentCulture => CultureInfo.CurrentCulture.Name;
+              private static string _currentCulture = CultureInfo.CurrentCulture.Name;
+              
+              public static void SetCulture(string culture)
+              {
+                  _currentCulture = culture;
+              }
           }
           """;
 
