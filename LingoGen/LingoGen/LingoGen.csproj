@@ -11,7 +11,11 @@
         <RootNamespace>LingoGen</RootNamespace>
         <PackageId>LingoGen</PackageId>
     </PropertyGroup>
-
+    
+    <PropertyGroup>
+        <EnablePackageValidation>true</EnablePackageValidation>
+    </PropertyGroup>
+    
     <ItemGroup>
         <!--- Roslyn dependencies -->
         <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="3.3.4">
@@ -35,9 +39,9 @@
             <TargetPathWithTargetPlatformMoniker Include="$(PKGNewtonsoft_Json)\lib\netstandard2.0\Newtonsoft.Json.dll" IncludeRuntimeDependency="false"/>
         </ItemGroup>
     </Target>
-    
+
     <ItemGroup>
-        <AdditionalFiles Include="AnalyzerReleases\AnalyzerReleases.Shipped.md" />
-        <AdditionalFiles Include="AnalyzerReleases\AnalyzerReleases.Unshipped.md" />
+        <AdditionalFiles Include="AnalyzerReleases\AnalyzerReleases.Shipped.md"/>
+        <AdditionalFiles Include="AnalyzerReleases\AnalyzerReleases.Unshipped.md"/>
     </ItemGroup>
 </Project>
