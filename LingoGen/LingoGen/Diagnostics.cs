@@ -1,7 +1,8 @@
 ﻿using System;
+using LingoGen.DataTypes;
 using Microsoft.CodeAnalysis;
 
-namespace LingoGen.DataTypes;
+namespace LingoGen;
 
 public static class Diagnostics
 {
