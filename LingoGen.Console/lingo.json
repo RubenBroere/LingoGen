@@ -1,9 +1,5 @@
 ﻿{
-  "Bicycle〱One": {
-    "en": "Bicycle",
-    "nl": "Fiets"
-  },
-  "Bicycle〱Two": {
+  "Bicycle": {
     "en": "Bicycle",
     "nl": "Fiets"
   },
@@ -15,6 +11,16 @@
     "Currency": {
       "en": "Currency",
       "nl": "Valuta"
+    },
+    "Commerce": {
+      "Invoice": {
+        "en": "Invoice",
+        "nl": "Factuur"
+      },
+      "Currency": {
+        "en": "Currency",
+        "nl": "Valuta"
+      }
     }
   },
   "Hello": {

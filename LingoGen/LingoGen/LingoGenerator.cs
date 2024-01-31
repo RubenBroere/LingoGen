@@ -1,7 +1,8 @@
-﻿using System.Collections.Immutable;
+﻿using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using LingoGen.DataTypes;
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.Text;
 
 namespace LingoGen;
 
@@ -27,20 +28,6 @@ public class LingoGenerator : IIncrementalGenerator
           }
           """;
 
-    private static readonly DiagnosticDescriptor NoEntriesWarning = new("LG1001",
-        "No entries in lingo.json",
-        "No entries in {0}",
-        "LingoGen",
-        DiagnosticSeverity.Warning,
-        true);
-
-    private static readonly DiagnosticDescriptor NoJsonWarning = new("LG1000",
-        "No lingo.json file found",
-        "No lingo.json file found",
-        "LingoGen",
-        DiagnosticSeverity.Warning,
-        true);
-
     public void Initialize(IncrementalGeneratorInitializationContext context)
     {
         // Initialize the compilation with the lingo class 
@@ -48,48 +35,64 @@ public class LingoGenerator : IIncrementalGenerator
 
         // Cache file contents
         var lingoFiles = context.AdditionalTextsProvider
-            .Where(static additionalText => Path.GetFileName(additionalText.Path) == "lingo.json");
+            .Where(static x => Path.GetFileName(x.Path) == "lingo.json")
+            .Select(static (x, ct) => ((string Path, string Content))(x.Path, x.GetText(ct)?.ToString())!)
+            .Where(static x => x.Content is not null);
 
-        var lingoTexts = lingoFiles
-            .Select(static (additionalText, ct) => additionalText.GetText(ct)?.ToString())
-            .Where(static text => text is not null);
-
+        // Bool to indicate if there are no files
         var noFiles = lingoFiles.Collect().Select((x, _) => x.IsEmpty);
 
-        // Cache lingo entries
-        var lingoEntries = lingoTexts
-            .SelectMany(static (content, _) => LingoEntryParser.ParseLingo(content!))
-            .WithComparer(new LingoEntryComparer());
+        var codeModel = lingoFiles.Select((x, ct) =>
+        {
+            var (entries, errors) = LingoDataParser.ParseLingo(x.Content, ct);
 
-        context.RegisterSourceOutput(lingoEntries.Collect().Combine(noFiles), GenerateCode);
+            return new GenerateCodeModel
+            {
+                FilePath = x.Path,
+                Entries = entries,
+                Errors = errors
+            };
+        });
+
+        // TODO: Cache lingo entries
+
+        context.RegisterSourceOutput(codeModel.Combine(noFiles), GenerateCode);
     }
 
-    private static void GenerateCode(SourceProductionContext ctx, (ImmutableArray<LingoEntry> entries, bool noFiles) input)
+    private static void GenerateCode(SourceProductionContext ctx, (GenerateCodeModel model, bool noFiles) input)
     {
-        var (entries, noFiles) = input;
-
-
-        ctx.ReportDiagnostic(Diagnostic.Create(NoEntriesWarning,
-            Location.Create(@"C:\Workspace\Projects\LingoGen\LingoGen.Console\lingo.json", TextSpan.FromBounds(2, 8),
-                new(new(1, 2), new(1, 8))), @"C:\Workspace\Projects\LingoGen\LingoGen.Console\lingo.json"));
-        
+        var (model, noFiles) = input;
 
         if (noFiles)
         {
-            ctx.ReportDiagnostic(Diagnostic.Create(NoJsonWarning, Location.None));
+            ctx.ReportDiagnostic(Diagnostic.Create(Diagnostics.NoJsonWarning, Location.None));
             return;
         }
 
-        if (entries.IsEmpty)
+        if (!model.Entries.Any())
         {
-            ctx.ReportDiagnostic(Diagnostic.Create(NoEntriesWarning, Location.None));
+            ctx.ReportDiagnostic(Diagnostic.Create(Diagnostics.NoEntriesWarning, Location.Create(model.FilePath, new(), new()), model.FilePath));
             return;
         }
 
-        foreach (var entry in entries)
+        foreach (var error in model.Errors)
         {
-            var source = LingoClass.Build(entry.Path, entry.Translations);
-            ctx.AddSource($"Lingo.{entry.Path}.g.cs", source);
+            ctx.ReportDiagnostic(Diagnostics.FromParserError(error, model.FilePath));
+        }
+
+        foreach (var entry in model.Entries)
+        {
+            var source = LingoClass.Build(entry, model.FilePath);
+            ctx.AddSource($"Lingo.{entry.FullPath}.g.cs", source);
         }
     }
+}
+
+public class GenerateCodeModel
+{
+    public string FilePath { get; set; } = "";
+
+    public IEnumerable<LingoEntry> Entries { get; set; } = [];
+
+    public IEnumerable<LingoParserError> Errors { get; set; } = [];
 }

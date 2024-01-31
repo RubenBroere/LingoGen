@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Text;
+using LingoGen.DataTypes;
 
 namespace LingoGen;
 
@@ -19,16 +19,13 @@ public static class LingoClass
           {
           """;
 
-    public static string Build(string path, Dictionary<string, string> translations)
+    public static string Build(LingoEntry entry, string filePath)
     {
-        var collections = path.Split('.').ToList();
+        var collections = entry.FullPath.Split('.').ToList();
         var sb = new StringBuilder(Header);
         sb.AppendLine();
 
-        var key = collections.Last();
-
         const string tabSize = "    ";
-
         var indent = tabSize;
 
         // Collection class declarations
@@ -40,6 +37,8 @@ public static class LingoClass
             indent += tabSize;
         }
 
+        var key = collections.Last();
+
         // Method declaration
         sb.AppendLine(indent + "public static string " + key + " => CultureInfo.CurrentUICulture.TwoLetterISOLanguageName switch");
         sb.AppendLine(indent + "{");
@@ -47,7 +46,7 @@ public static class LingoClass
         indent += tabSize;
 
         // Translations
-        foreach (var translation in translations)
+        foreach (var translation in entry.Translations)
         {
             sb.AppendLine(indent + $"\"{translation.Key}\" => \"{translation.Value}\",");
         }

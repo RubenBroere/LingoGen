@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using LingoGen.DataTypes;
 
 namespace LingoGen;
 
@@ -6,7 +7,7 @@ public sealed class LingoEntryComparer : IEqualityComparer<LingoEntry>
 {
     public bool Equals(LingoEntry x, LingoEntry y)
     {
-        if (x.Path != y.Path)
+        if (x.FullPath != y.FullPath)
             return false;
 
         if (x.Translations.Count != y.Translations.Count)
@@ -25,5 +26,5 @@ public sealed class LingoEntryComparer : IEqualityComparer<LingoEntry>
     }
 
     // TODO: Create a better hashcode
-    public int GetHashCode(LingoEntry obj) => obj.Path.GetHashCode();
+    public int GetHashCode(LingoEntry obj) => obj.FullPath.GetHashCode();
 }
