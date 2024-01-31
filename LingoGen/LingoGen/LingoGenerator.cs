@@ -1,10 +1,11 @@
 ﻿using System.Collections.Immutable;
 using System.IO;
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.Text;
 
 namespace LingoGen;
 
-[Generator]
+[Generator(LanguageNames.CSharp)]
 public class LingoGenerator : IIncrementalGenerator
 {
     public const string Namespace = "LingoGen";
@@ -27,15 +28,15 @@ public class LingoGenerator : IIncrementalGenerator
           """;
 
     private static readonly DiagnosticDescriptor NoEntriesWarning = new("LG1001",
-        "LG1001: No entries in lingo.json",
-        "LG1001: No entries in {0}",
+        "No entries in lingo.json",
+        "No entries in {0}",
         "LingoGen",
         DiagnosticSeverity.Warning,
         true);
 
     private static readonly DiagnosticDescriptor NoJsonWarning = new("LG1000",
-        "LG1000: No lingo.json file found",
-        "LG1000: No lingo.json file found",
+        "No lingo.json file found",
+        "No lingo.json file found",
         "LingoGen",
         DiagnosticSeverity.Warning,
         true);
@@ -66,6 +67,12 @@ public class LingoGenerator : IIncrementalGenerator
     private static void GenerateCode(SourceProductionContext ctx, (ImmutableArray<LingoEntry> entries, bool noFiles) input)
     {
         var (entries, noFiles) = input;
+
+
+        ctx.ReportDiagnostic(Diagnostic.Create(NoEntriesWarning,
+            Location.Create(@"C:\Workspace\Projects\LingoGen\LingoGen.Console\lingo.json", TextSpan.FromBounds(2, 8),
+                new(new(1, 2), new(1, 8))), @"C:\Workspace\Projects\LingoGen\LingoGen.Console\lingo.json"));
+        
 
         if (noFiles)
         {

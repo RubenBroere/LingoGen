@@ -1,17 +1,9 @@
 ﻿{
-  "Hello": {
-    "en": "Hello",
-    "nl": "Hallo"
-  },
-  "World": {
-    "en": "World",
-    "nl": "Wereld"
-  },
-  "Bicycle〱Two": {
+  "Bicycle〱One": {
     "en": "Bicycle",
     "nl": "Fiets"
   },
-  "Bicycle〱One": {
+  "Bicycle〱Two": {
     "en": "Bicycle",
     "nl": "Fiets"
   },
@@ -24,5 +16,13 @@
       "en": "Currency",
       "nl": "Valuta"
     }
+  },
+  "Hello": {
+    "en": "Hello",
+    "nl": "Hallo"
+  },
+  "World": {
+    "en": "World",
+    "nl": "Wereld"
   }
 }
