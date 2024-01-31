@@ -12,6 +12,7 @@
         <PackageId>RubenBroere.LingoGen</PackageId>
 
         <Authors>Ruben Broere</Authors>
+        <Version>1.0.0</Version>
         <Description>An incremental Roslyn source generator for statically typed translations.</Description>
         <PackageProjectUrl>https://github.com/RubenBroere/lingo-gen</PackageProjectUrl>
         <RepositoryUrl>https://github.com/RubenBroere/lingo-gen</RepositoryUrl>
