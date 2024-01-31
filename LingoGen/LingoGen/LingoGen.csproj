@@ -14,6 +14,7 @@
         <Authors>Ruben Broere</Authors>
         <Description>An incremental Roslyn source generator for statically typed translations.</Description>
         <PackageProjectUrl>https://github.com/RubenBroere/lingo-gen</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/RubenBroere/lingo-gen</RepositoryUrl>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <PackageIcon>icon.png</PackageIcon>
