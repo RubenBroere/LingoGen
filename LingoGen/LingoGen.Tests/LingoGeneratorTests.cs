@@ -11,15 +11,13 @@ public class LingoGeneratorTests
     private const string LingoJson =
         """
         {
-            "Entries": {
-                "Hello": {
-                    "en" : "Hello",
-                    "nl" : "Hallo"
-                },
-                "World": {
-                    "en" : "World",
-                    "nl" : "Wereld"
-                }
+            "Hello": {
+                "en" : "Hello",
+                "nl" : "Hallo"
+            },
+            "World": {
+                "en" : "World",
+                "nl" : "Wereld"
             }
         }
         """;

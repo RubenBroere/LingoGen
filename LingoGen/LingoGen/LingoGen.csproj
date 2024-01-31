@@ -25,7 +25,11 @@
         <NoWarn>$(NoWarn);CS1591</NoWarn>
         <EnablePackageValidation>true</EnablePackageValidation>
     </PropertyGroup>
-
+    
+    <ItemGroup>
+        <None Include="icon.png" Pack="true" PackagePath=""/>
+    </ItemGroup>
+    
     <ItemGroup>
         <!--- Roslyn dependencies -->
         <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="3.3.4">
