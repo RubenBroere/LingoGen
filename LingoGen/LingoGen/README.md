@@ -1,0 +1,1 @@
+﻿# Unofficial Readme for LingoGen
