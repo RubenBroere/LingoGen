@@ -9,13 +9,23 @@
         <IsRoslynComponent>true</IsRoslynComponent>
 
         <RootNamespace>LingoGen</RootNamespace>
-        <PackageId>LingoGen</PackageId>
-    </PropertyGroup>
-    
-    <PropertyGroup>
+        <PackageId>RubenBroere.LingoGen</PackageId>
+
+        <Authors>Ruben Broere</Authors>
+        <Description>An incremental Roslyn source generator for statically typed translations.</Description>
+        <PackageProjectUrl>https://github.com/RubenBroere/lingo-gen</PackageProjectUrl>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <PackageIcon>icon.png</PackageIcon>
+
+        <!-- A list of tags to help the search engine to understand the content of the package -->
+        <PackageTags>sample, library</PackageTags>
+        <GenerateDocumentationFile>True</GenerateDocumentationFile>
+
+        <NoWarn>$(NoWarn);CS1591</NoWarn>
         <EnablePackageValidation>true</EnablePackageValidation>
     </PropertyGroup>
-    
+
     <ItemGroup>
         <!--- Roslyn dependencies -->
         <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="3.3.4">
