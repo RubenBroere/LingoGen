@@ -1,43 +1,19 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
     <PropertyGroup>
         <TargetFramework>netstandard2.0</TargetFramework>
         <LangVersion>latest</LangVersion>
         <Nullable>enable</Nullable>
+        <Version>0.0.0</Version>
 
         <EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
-        <IsRoslynComponent>true</IsRoslynComponent>
-
-        <RootNamespace>LingoGen</RootNamespace>
-        <PackageId>RubenBroere.LingoGen</PackageId>
-
-        <Authors>Ruben Broere</Authors>
-        <Version>1.0.0</Version>
-        <Description>An incremental Roslyn source generator for statically typed translations.</Description>
-        <PackageProjectUrl>https://github.com/RubenBroere/lingo-gen</PackageProjectUrl>
-        <RepositoryUrl>https://github.com/RubenBroere/lingo-gen</RepositoryUrl>
-        <PackageLicenseExpression>MIT</PackageLicenseExpression>
-        <PackageReadmeFile>README.md</PackageReadmeFile>
-        <PackageIcon>icon.png</PackageIcon>
-
-        <!-- A list of tags to help the search engine to understand the content of the package -->
-        <PackageTags>sample, library</PackageTags>
-        <GenerateDocumentationFile>True</GenerateDocumentationFile>
-
-        <NoWarn>$(NoWarn);CS1591</NoWarn>
-        <EnablePackageValidation>true</EnablePackageValidation>
+        <developmentDependency>true</developmentDependency>
+        <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+        <IncludeBuildOutput>false</IncludeBuildOutput>
+        <NoPackageAnalysis>true</NoPackageAnalysis>
     </PropertyGroup>
     
     <ItemGroup>
-        <PackageReference Include="DotNet.ReproducibleBuilds" Version="1.1.1">
-            <PrivateAssets>all</PrivateAssets>
-            <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
-        </PackageReference>
-    </ItemGroup>
-    
-    <ItemGroup>
-        <None Include="icon.png" Pack="true" PackagePath=""/>
-        <None Include="README.md" Pack="true" PackagePath=""/>
+        <AdditionalFiles Include="AnalyzerReleases\*.md"/>
     </ItemGroup>
 
     <ItemGroup>
@@ -47,25 +23,43 @@
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
         <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.8.0"/>
+
+        <!-- 👇 Reference a NuGet package and use PrivateAssets="All" to prevent adding the NuGet dependency when creating the package. -->
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.3" PrivateAssets="All"
+                          IncludeInPackage="true"/>
     </ItemGroup>
 
-    <ItemGroup>
-        <!-- Generator dependencies -->
-        <PackageReference Include="Newtonsoft.Json" Version="13.0.3" GeneratePathProperty="true" PrivateAssets="all"/>
-    </ItemGroup>
+    <!-- 👇 Add a new target that runs before the task that lists all the files to include in the NuGet package.
+            This task must run after the packages resolution target -->
+    <Target Name="AddNuGetDlls" BeforeTargets="_GetPackageFiles">
+        <!-- Merge the collection of PackageReference and Assemblies using the NuGetPackageId key.
+             This produces a new list containing the DLL path and the "IncludeInPackage" metadata-->
+        <JoinItems Left="@(ResolvedCompileFileDefinitions)" LeftKey="NuGetPackageId" LeftMetadata="*"
+                   Right="@(PackageReference)" RightKey="" RightMetadata="*"
+                   ItemSpecToUse="Left">
+            <Output TaskParameter="JoinResult" ItemName="_PackagesToPack"/>
+        </JoinItems>
 
-    <PropertyGroup>
-        <GetTargetPathDependsOn>$(GetTargetPathDependsOn);GetDependencyTargetPaths</GetTargetPathDependsOn>
-    </PropertyGroup>
-
-    <Target Name="GetDependencyTargetPaths">
         <ItemGroup>
-            <TargetPathWithTargetPlatformMoniker Include="$(PKGNewtonsoft_Json)\lib\netstandard2.0\Newtonsoft.Json.dll" IncludeRuntimeDependency="false"/>
+            <!-- Remove NETStandard DLLs -->
+            <_PackagesToPack Remove="@(_PackagesToPack)" Condition="%(NuGetPackageId) == 'NETStandard.Library'"/>
+            <_PackagesToPack Remove="@(_PackagesToPack)" Condition="%(_PackagesToPack.IncludeInPackage) != 'true'"/>
+        </ItemGroup>
+
+        <Message Importance="High" Text="Adding DLLs from the following packages: @(_PackagesToPack->'%(NuGetPackageId)')"/>
+
+        <ItemGroup>
+            <!-- Update the collection of items to pack with the DLLs from the NuGet packages -->
+            <None Include="@(_PackagesToPack)"
+                  Pack="true"
+                  PackagePath="analyzers/dotnet/cs"
+                  Visible="false"/>
+
+            <!-- Add the DLL produced by the current project to the NuGet package -->
+            <None Include="$(OutputPath)\$(AssemblyName).dll"
+                  Pack="true"
+                  PackagePath="analyzers/dotnet/cs"
+                  Visible="false"/>
         </ItemGroup>
     </Target>
-
-    <ItemGroup>
-        <AdditionalFiles Include="AnalyzerReleases\AnalyzerReleases.Shipped.md"/>
-        <AdditionalFiles Include="AnalyzerReleases\AnalyzerReleases.Unshipped.md"/>
-    </ItemGroup>
 </Project>
