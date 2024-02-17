@@ -1,7 +1,7 @@
 ﻿using System.Text;
-using LingoGen.DataTypes;
+using LingoGen.Generator.DataTypes;
 
-namespace LingoGen;
+namespace LingoGen.Generator;
 
 public static class LingoClass
 {

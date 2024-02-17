@@ -1,8 +1,8 @@
-﻿using LingoGen.DataTypes;
+﻿using LingoGen.Generator.DataTypes;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace LingoGen;
+namespace LingoGen.Generator;
 
 public static class LingoDataParser
 {

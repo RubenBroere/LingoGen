@@ -1,7 +1,7 @@
-﻿using LingoGen.DataTypes;
+﻿using LingoGen.Generator.DataTypes;
 using Microsoft.CodeAnalysis;
 
-namespace LingoGen;
+namespace LingoGen.Generator;
 
 [Generator(LanguageNames.CSharp)]
 public class LingoGenerator : IIncrementalGenerator

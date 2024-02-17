@@ -1,10 +1,9 @@
-using System.Linq;
-using LingoGen.Tests.Utils;
+using LingoGen.Generator.Tests.Utils;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Xunit;
 
-namespace LingoGen.Tests;
+namespace LingoGen.Generator.Tests;
 
 public class LingoGeneratorTests
 {

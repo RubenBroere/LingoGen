@@ -1,10 +1,10 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LingoGen", "LingoGen\LingoGen\LingoGen.csproj", "{F84E0958-5CF6-438F-B5D0-6FCAF4A28C30}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LingoGen.Generator", "LingoGen.Generator\LingoGen.Generator\LingoGen.Generator.csproj", "{A078F54B-170B-4C56-B160-EFEE0D91DFC6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LingoGen.Tests", "LingoGen\LingoGen.Tests\LingoGen.Tests.csproj", "{E1D3B2C1-C136-4823-8E75-6A0A3BFFAB4A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LingoGen.Generator.Sample", "LingoGen.Generator\LingoGen.Generator.Sample\LingoGen.Generator.Sample.csproj", "{B0962E57-D28D-4D6F-9AE7-9EA32D2BF3F5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LingoGen.Sample", "LingoGen.Sample\LingoGen.Sample.csproj", "{0621EF5C-E632-4D13-963F-4EC2D6C17223}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LingoGen.Generator.Tests", "LingoGen.Generator\LingoGen.Generator.Tests\LingoGen.Generator.Tests.csproj", "{85EEC817-B1FD-47F6-AF4A-D38CA2225C84}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -12,17 +12,17 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{F84E0958-5CF6-438F-B5D0-6FCAF4A28C30}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F84E0958-5CF6-438F-B5D0-6FCAF4A28C30}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F84E0958-5CF6-438F-B5D0-6FCAF4A28C30}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F84E0958-5CF6-438F-B5D0-6FCAF4A28C30}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E1D3B2C1-C136-4823-8E75-6A0A3BFFAB4A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E1D3B2C1-C136-4823-8E75-6A0A3BFFAB4A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E1D3B2C1-C136-4823-8E75-6A0A3BFFAB4A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E1D3B2C1-C136-4823-8E75-6A0A3BFFAB4A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{0621EF5C-E632-4D13-963F-4EC2D6C17223}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0621EF5C-E632-4D13-963F-4EC2D6C17223}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0621EF5C-E632-4D13-963F-4EC2D6C17223}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0621EF5C-E632-4D13-963F-4EC2D6C17223}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A078F54B-170B-4C56-B160-EFEE0D91DFC6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A078F54B-170B-4C56-B160-EFEE0D91DFC6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A078F54B-170B-4C56-B160-EFEE0D91DFC6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A078F54B-170B-4C56-B160-EFEE0D91DFC6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B0962E57-D28D-4D6F-9AE7-9EA32D2BF3F5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B0962E57-D28D-4D6F-9AE7-9EA32D2BF3F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B0962E57-D28D-4D6F-9AE7-9EA32D2BF3F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B0962E57-D28D-4D6F-9AE7-9EA32D2BF3F5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{85EEC817-B1FD-47F6-AF4A-D38CA2225C84}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{85EEC817-B1FD-47F6-AF4A-D38CA2225C84}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{85EEC817-B1FD-47F6-AF4A-D38CA2225C84}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{85EEC817-B1FD-47F6-AF4A-D38CA2225C84}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

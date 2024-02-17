@@ -1,4 +1,4 @@
-﻿namespace LingoGen.DataTypes;
+﻿namespace LingoGen.Generator.DataTypes;
 
 public enum LingoErrorType
 {

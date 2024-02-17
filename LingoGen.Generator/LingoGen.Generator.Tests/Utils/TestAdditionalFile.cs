@@ -1,8 +1,7 @@
-using System.Threading;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Text;
 
-namespace LingoGen.Tests.Utils;
+namespace LingoGen.Generator.Tests.Utils;
 
 public class TestAdditionalFile(string path, string text) : AdditionalText
 {

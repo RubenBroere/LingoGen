@@ -3,10 +3,12 @@
     <PropertyGroup>
         <TargetFramework>net8.0</TargetFramework>
         <Nullable>enable</Nullable>
+        <LangVersion>latest</LangVersion>
+        <ImplicitUsings>true</ImplicitUsings>
 
         <IsPackable>false</IsPackable>
 
-        <RootNamespace>LingoGen.Tests</RootNamespace>
+        <RootNamespace>LingoGen.Generator.Tests</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
@@ -21,7 +23,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\LingoGen\LingoGen.csproj"/>
+        <ProjectReference Include="..\LingoGen.Generator\LingoGen.Generator.csproj"/>
     </ItemGroup>
 
 

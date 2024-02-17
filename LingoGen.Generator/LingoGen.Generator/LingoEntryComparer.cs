@@ -1,6 +1,6 @@
-﻿using LingoGen.DataTypes;
+﻿using LingoGen.Generator.DataTypes;
 
-namespace LingoGen;
+namespace LingoGen.Generator;
 
 public sealed class LingoEntryComparer : IEqualityComparer<LingoEntry>
 {

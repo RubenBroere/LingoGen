@@ -1,4 +1,4 @@
-﻿namespace LingoGen.DataTypes;
+﻿namespace LingoGen.Generator.DataTypes;
 
 public sealed class LingoEntry(string fullPath, Dictionary<string, string> translations)
 {

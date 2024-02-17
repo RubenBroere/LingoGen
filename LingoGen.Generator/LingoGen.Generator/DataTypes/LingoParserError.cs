@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace LingoGen.DataTypes;
+namespace LingoGen.Generator.DataTypes;
 
 public readonly struct LingoParserError(LingoErrorType lingoErrorType, string? path, int lineNumber, int linePosition)
 {
