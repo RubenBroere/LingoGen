@@ -4,7 +4,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LingoGen", "LingoGen\LingoG
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LingoGen.Tests", "LingoGen\LingoGen.Tests\LingoGen.Tests.csproj", "{E1D3B2C1-C136-4823-8E75-6A0A3BFFAB4A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LingoGen.Console", "LingoGen.Console\LingoGen.Console.csproj", "{0621EF5C-E632-4D13-963F-4EC2D6C17223}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LingoGen.Sample", "LingoGen.Sample\LingoGen.Sample.csproj", "{0621EF5C-E632-4D13-963F-4EC2D6C17223}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

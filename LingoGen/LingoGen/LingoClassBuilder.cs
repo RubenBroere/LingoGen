@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using System.Text;
+﻿using System.Text;
 using LingoGen.DataTypes;
 
 namespace LingoGen;

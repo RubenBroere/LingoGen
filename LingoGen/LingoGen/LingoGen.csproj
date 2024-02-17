@@ -1,65 +1,49 @@
 <Project Sdk="Microsoft.NET.Sdk">
+
     <PropertyGroup>
         <TargetFramework>netstandard2.0</TargetFramework>
         <LangVersion>latest</LangVersion>
         <Nullable>enable</Nullable>
-        <Version>0.0.0</Version>
-
-        <EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
-        <developmentDependency>true</developmentDependency>
-        <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+        <ImplicitUsings>enable</ImplicitUsings>
         <IncludeBuildOutput>false</IncludeBuildOutput>
-        <NoPackageAnalysis>true</NoPackageAnalysis>
+        <EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
     </PropertyGroup>
-    
+
+    <!-- Analyzer Releases -->
     <ItemGroup>
         <AdditionalFiles Include="AnalyzerReleases\*.md"/>
     </ItemGroup>
 
     <ItemGroup>
-        <!--- Roslyn dependencies -->
-        <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="3.3.4">
-            <PrivateAssets>all</PrivateAssets>
-            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-        </PackageReference>
-        <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.8.0"/>
+        <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.8.0" PrivateAssets="all"/>
 
-        <!-- 👇 Reference a NuGet package and use PrivateAssets="All" to prevent adding the NuGet dependency when creating the package. -->
-        <PackageReference Include="Newtonsoft.Json" Version="13.0.3" PrivateAssets="All"
-                          IncludeInPackage="true"/>
+        <None Include="$(OutputPath)\$(AssemblyName).dll"
+              Pack="true"
+              PackagePath="analyzers/dotnet/cs"
+              Visible="false"/>
     </ItemGroup>
 
-    <!-- 👇 Add a new target that runs before the task that lists all the files to include in the NuGet package.
-            This task must run after the packages resolution target -->
-    <Target Name="AddNuGetDlls" BeforeTargets="_GetPackageFiles">
-        <!-- Merge the collection of PackageReference and Assemblies using the NuGetPackageId key.
-             This produces a new list containing the DLL path and the "IncludeInPackage" metadata-->
-        <JoinItems Left="@(ResolvedCompileFileDefinitions)" LeftKey="NuGetPackageId" LeftMetadata="*"
-                   Right="@(PackageReference)" RightKey="" RightMetadata="*"
-                   ItemSpecToUse="Left">
-            <Output TaskParameter="JoinResult" ItemName="_PackagesToPack"/>
-        </JoinItems>
+    <ItemGroup>
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.3" PrivateAssets="all" GeneratePathProperty="true"/>
 
+        <None Include="$(PkgNewtonsoft_Json)\lib\netstandard2.0\*.dll"
+              Pack="true"
+              PackagePath="analyzers/dotnet/cs"
+              Visible="false"/>
+    </ItemGroup>
+
+    <PropertyGroup>
+        <GetTargetPathDependsOn>
+            $(GetTargetPathDependsOn);GetDependencyTargetPaths
+        </GetTargetPathDependsOn>
+    </PropertyGroup>
+
+    <Target Name="GetDependencyTargetPaths">
         <ItemGroup>
-            <!-- Remove NETStandard DLLs -->
-            <_PackagesToPack Remove="@(_PackagesToPack)" Condition="%(NuGetPackageId) == 'NETStandard.Library'"/>
-            <_PackagesToPack Remove="@(_PackagesToPack)" Condition="%(_PackagesToPack.IncludeInPackage) != 'true'"/>
-        </ItemGroup>
-
-        <Message Importance="High" Text="Adding DLLs from the following packages: @(_PackagesToPack->'%(NuGetPackageId)')"/>
-
-        <ItemGroup>
-            <!-- Update the collection of items to pack with the DLLs from the NuGet packages -->
-            <None Include="@(_PackagesToPack)"
-                  Pack="true"
-                  PackagePath="analyzers/dotnet/cs"
-                  Visible="false"/>
-
-            <!-- Add the DLL produced by the current project to the NuGet package -->
-            <None Include="$(OutputPath)\$(AssemblyName).dll"
-                  Pack="true"
-                  PackagePath="analyzers/dotnet/cs"
-                  Visible="false"/>
+            <TargetPathWithTargetPlatformMoniker
+                    Include="$(PKGNewtonsoft_Json)\lib\netstandard2.0\Newtonsoft.Json.dll"
+                    IncludeRuntimeDependency="false"/>
         </ItemGroup>
     </Target>
+
 </Project>

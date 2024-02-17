@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using LingoGen.DataTypes;
+﻿using LingoGen.DataTypes;
 using Microsoft.CodeAnalysis;
 
 namespace LingoGen;

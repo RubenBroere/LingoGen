@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace LingoGen.DataTypes;
+﻿namespace LingoGen.DataTypes;
 
 public sealed class LingoData
 {

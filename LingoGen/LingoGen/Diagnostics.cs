@@ -1,5 +1,4 @@
-﻿using System;
-using LingoGen.DataTypes;
+﻿using LingoGen.DataTypes;
 using Microsoft.CodeAnalysis;
 
 namespace LingoGen;

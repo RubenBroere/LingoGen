@@ -4,8 +4,8 @@
         <OutputType>Exe</OutputType>
         <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
-        <IsPackable>false</IsPackable>
         <Nullable>enable</Nullable>
+        <IsPackable>false</IsPackable>
     </PropertyGroup>
 
     <ItemGroup>
@@ -13,7 +13,8 @@
     </ItemGroup>
 
     <ItemGroup>
-        <AdditionalFiles Include="lingo.json"/>
+        <AdditionalFiles Include="lingoNew.json" />
+        <AdditionalFiles Include="lingo.json" />
     </ItemGroup>
 
 </Project>

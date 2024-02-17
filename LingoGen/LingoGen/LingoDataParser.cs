@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Threading;
-using LingoGen.DataTypes;
+﻿using LingoGen.DataTypes;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
