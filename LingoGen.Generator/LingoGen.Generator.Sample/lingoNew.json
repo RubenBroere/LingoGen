@@ -1,40 +1,44 @@
 ﻿{
   "metadata": {
     "version": "0.0.0",
-    "supportedLanguages": ["en", "nl", "fr"]
+    "languages": ["nl", "fr"]
   },
-  "content": [
-    {
-      "en": "Sorry for the inconvenience.",
+  "phrases": {
+    "Test": {
+      "nl": "Test",
+      "fr": "Test"
+    },
+    "Sorry for the inconvenience.": {
       "nl": "Sorry voor het ongemak.",
       "fr": "Désolé pour le dérangement."
     },
-    {
-      "en": "Goodbye",
-      "nl": "Tot ziens",
-      "fr": "Au revoir"
+    "Goodbye": {
+      "nl": "Tot ziens"
     },
-    {
-      "en": "Hello",
+    "Hello": {
       "nl": "Hallo",
-      "fr": "Bonjour"
+      "fr": "Bonjour",
+      "de": "Hallo"
     },
-    {
-      "en": "Select a(n) {Noun}",
+    "Select a(n) {Noun}": {
       "nl": "Selecteer een {Noun}",
       "fr": "Sélectionnez un(e) {Noun}"
+    },
+    "The {Noun} is {Adjective}": {
+      "nl": "De {Noun} is {Adjective} en {Extra}",
+      "fr": "Le {Noun}"
     }
-  ],
-  "nouns": [
-    {
+  },
+  "nouns": {
+    "World": {
       "en": ["world", "worlds"],
       "nl": ["wereld", "werelden"],
-      "fr": ["monde", "mondes"],
+      "fr": ["monde", "mondes"]
     },
-    {
+    "Person": {
       "en": ["person", "people"],
       "nl": ["persoon", "mensen"],
       "fr": ["personne", "personnes"]
     }
-  ]
+  }
 }

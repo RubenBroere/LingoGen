@@ -13,6 +13,7 @@
 
     <ItemGroup>
         <AdditionalFiles Include="lingo.json" />
+        <AdditionalFiles Include="lingoNew.json" />
     </ItemGroup>
 
 </Project>

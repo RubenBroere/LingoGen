@@ -18,7 +18,7 @@ public static class LingoClass
           {
           """;
 
-    public static string Build(LingoEntry entry, string filePath)
+    public static string Build(LingoEntry entry)
     {
         var collections = entry.FullPath.Split('.').ToList();
         var sb = new StringBuilder(Header);
@@ -61,5 +61,10 @@ public static class LingoClass
         }
 
         return sb.ToString();
+    }
+
+    public static string Build(LingoPhrase phrase)
+    {
+        return "";
     }
 }
