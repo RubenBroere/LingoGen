@@ -32,7 +32,7 @@ public class LingoGenerator : IIncrementalGenerator
 
         // Cache file contents
         var lingoFiles = context.AdditionalTextsProvider
-            .Where(static x => Path.GetFileName(x.Path) == "lingoNew.json")
+            .Where(static x => Path.GetFileName(x.Path) == "lingo.json")
             .Select(static (x, ct) => ((string Path, string Content))(x.Path, x.GetText(ct)?.ToString())!)
             .Where(static x => x.Content is not null);
 

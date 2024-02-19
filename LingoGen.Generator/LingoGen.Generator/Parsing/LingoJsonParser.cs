@@ -135,6 +135,9 @@ public class LingoJsonParser
             {
                 Report(property.Value[extraLanguage]!, $"Phrase '{phrase.Key}' has a '{extraLanguage}' translation which is not supported");
             }
+            
+            // Add english translation after checking for missing languages 
+            translations.Add("en", property.Name);
 
             foreach (Match match in _argumentRegex.Matches(property.Name))
             {

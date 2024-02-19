@@ -1,34 +1,40 @@
 ﻿{
-  "Bicycle": {
-    "en": "Bicycle",
-    "nl": "Fiets"
+  "metadata": {
+    "version": "0.0.0",
+    "languages": ["nl", "fr"]
   },
-  "Finance": {
-    "Invoice": {
-      "en": "Invoice",
-      "nl": "Factuur"
+  "phrases": {
+    "Sorry for the inconvenience.": {
+      "nl": "Sorry voor het ongemak.",
+      "fr": "Désolé pour le dérangement."
     },
-    "Currency": {
-      "en": "Currency",
-      "nl": "Valuta"
+    "Goodbye": {
+      "nl": "Tot ziens"
     },
-    "Commerce": {
-      "Invoice": {
-        "en": "Invoice",
-        "nl": "Factuur"
-      },
-      "Currency": {
-        "en": "Currency",
-        "nl": "Valuta"
-      }
+    "Hello": {
+      "nl": "Hallo",
+      "fr": "Bonjour",
+      "de": "Hallo"
+    },
+    "Select a(n) {Noun}": {
+      "nl": "Selecteer een {Noun}",
+      "fr": "Sélectionnez un(e) {Noun}"
+    },
+    "The {Noun} is {Adjective}": {
+      "nl": "De {Noun} is {Adjective} en {Extra}",
+      "fr": "Le {Noun}"
     }
   },
-  "Hello": {
-    "en": "Hello",
-    "nl": "Hallo"
-  },
-  "World": {
-    "en": "World",
-    "nl": "Wereld"
+  "nouns": {
+    "World": {
+      "en": ["world", "worlds"],
+      "nl": ["wereld", "werelden"],
+      "fr": ["monde", "mondes"]
+    },
+    "Person": {
+      "en": ["person", "people"],
+      "nl": ["persoon", "mensen"],
+      "fr": ["personne", "personnes"]
+    }
   }
 }
