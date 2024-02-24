@@ -1,4 +1,4 @@
-﻿using LingoGen.Generator.DataTypes;
+﻿using LingoGen.Generator.Parsing;
 using Microsoft.CodeAnalysis;
 
 namespace LingoGen.Generator;
@@ -39,15 +39,15 @@ public class LingoGenerator : IIncrementalGenerator
         // Bool to indicate if there are no files
         var noFiles = lingoFiles.Collect().Select((x, _) => x.IsEmpty);
 
-        var codeModel = lingoFiles.Select((x, ct) =>
+        var codeModel = lingoFiles.Select((x, _) =>
         {
-            var (entries, errors) = LingoDataParser.ParseLingo(x.Content, ct);
+            // TODO: Use cancellation token
+            var parserResult = LingoJsonParser.Parse(x.Content, x.Path);
 
             return new GenerateCodeModel
             {
                 FilePath = x.Path,
-                Entries = entries,
-                Errors = errors
+                ParserResult = parserResult
             };
         });
 
@@ -66,21 +66,15 @@ public class LingoGenerator : IIncrementalGenerator
             return;
         }
 
-        if (!model.Entries.Any())
+        foreach (var error in model.ParserResult.Diagnostics)
         {
-            ctx.ReportDiagnostic(Diagnostic.Create(Diagnostics.NoEntriesWarning, Location.Create(model.FilePath, new(), new()), model.FilePath));
-            return;
+            ctx.ReportDiagnostic(error);
         }
 
-        foreach (var error in model.Errors)
+        foreach (var phrase in model.ParserResult.LingoData.Phrases)
         {
-            ctx.ReportDiagnostic(Diagnostics.FromParserError(error, model.FilePath));
-        }
-
-        foreach (var entry in model.Entries)
-        {
-            var source = LingoClass.Build(entry, model.FilePath);
-            ctx.AddSource($"Lingo.{entry.FullPath}.g.cs", source);
+            var source = LingoClass.Build(phrase);
+            ctx.AddSource($"Lingo.{phrase.Key}.g.cs", source);
         }
     }
 }
@@ -88,8 +82,6 @@ public class LingoGenerator : IIncrementalGenerator
 public class GenerateCodeModel
 {
     public string FilePath { get; set; } = "";
-
-    public IEnumerable<LingoEntry> Entries { get; set; } = [];
-
-    public IEnumerable<LingoParserError> Errors { get; set; } = [];
+    
+    public ParserResult ParserResult { get; set; } = new();
 }

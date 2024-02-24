@@ -2,31 +2,76 @@
 
     <PropertyGroup>
         <TargetFramework>netstandard2.0</TargetFramework>
-        <Nullable>enable</Nullable>
-        <LangVersion>latest</LangVersion>
-        <ImplicitUsings>true</ImplicitUsings>
         <IncludeBuildOutput>false</IncludeBuildOutput>
 
         <EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
         <IsRoslynComponent>true</IsRoslynComponent>
 
         <RootNamespace>LingoGen.Generator</RootNamespace>
-        <PackageId>LingoGen.Generator</PackageId>
+    </PropertyGroup>
+
+    <!-- Package information -->
+    <PropertyGroup>
+        <EnablePackageValidation>true</EnablePackageValidation>
+        
+        <Version>0.1.0</Version>
+        <PackageId>RubenBroere.LingoGen</PackageId>
+        <PackageTags>roslyn, source generator, csharp, localization</PackageTags>
+        <RepositoryUrl>https://github.com/RubenBroere/lingo-gen</RepositoryUrl>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <PackageProjectUrl>https://github.com/RubenBroere/lingo-gen</PackageProjectUrl>
+        <PackageLicenseFile>LICENSE</PackageLicenseFile>
+        <Description>A Roslyn source generator for statically typed string localization</Description>
+        <Authors>Ruben Broere</Authors>
+        <PackageIcon>icon.png</PackageIcon>
     </PropertyGroup>
 
     <!-- Analyzer Releases -->
     <ItemGroup>
+        <None Include="..\..\README.md" Pack="true" PackagePath="\"/>
+        <None Include="..\..\icon.png" Pack="true" PackagePath="\"/>
+        <None Include="..\..\LICENSE" Pack="true" PackagePath="\"/>
         <AdditionalFiles Include="AnalyzerReleases\*.md"/>
     </ItemGroup>
 
     <!-- Analyzer Dependencies -->
     <ItemGroup>
         <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.8.0" PrivateAssets="all"/>
-        <PackageReference Include="Newtonsoft.Json" Version="13.0.3" PrivateAssets="all" GeneratePathProperty="true"/>
 
-        <None Include="$(OutputPath)\$(AssemblyName).dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false"/>
-        <None Include="$(PkgNewtonsoft_Json)\lib\netstandard2.0\*.dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false"/>
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.3" PrivateAssets="all" IncludeInPackage="true"/>
     </ItemGroup>
+
+    <Target Name="AddNuGetDlls" BeforeTargets="_GetPackageFiles">
+        <!-- Merge the collection of PackageReference and Assemblies using the NuGetPackageId key.
+             This produces a new list containing the DLL path and the "IncludeInPackage" metadata-->
+        <JoinItems Left="@(ResolvedCompileFileDefinitions)" LeftKey="NuGetPackageId" LeftMetadata="*"
+                   Right="@(PackageReference)" RightKey="" RightMetadata="*"
+                   ItemSpecToUse="Left">
+            <Output TaskParameter="JoinResult" ItemName="_PackagesToPack"/>
+        </JoinItems>
+
+        <ItemGroup>
+            <!-- Remove NETStandard DLLs -->
+            <_PackagesToPack Remove="@(_PackagesToPack)" Condition="%(NuGetPackageId) == 'NETStandard.Library'"/>
+            <_PackagesToPack Remove="@(_PackagesToPack)" Condition="%(_PackagesToPack.IncludeInPackage) != 'true'"/>
+        </ItemGroup>
+
+        <Message Importance="High" Text="Adding DLLs from the following packages: @(_PackagesToPack->'%(NuGetPackageId)')"/>
+
+        <ItemGroup>
+            <!-- Update the collection of items to pack with the DLLs from the NuGet packages -->
+            <None Include="@(_PackagesToPack)"
+                  Pack="true"
+                  PackagePath="analyzers/dotnet/cs"
+                  Visible="false"/>
+
+            <!-- Add the DLL produced by the current project to the NuGet package -->
+            <None Include="$(OutputPath)\$(AssemblyName).dll"
+                  Pack="true"
+                  PackagePath="analyzers/dotnet/cs"
+                  Visible="false"/>
+        </ItemGroup>
+    </Target>
 
     <!-- https://github.com/dotnet/roslyn/discussions/47517-->
     <PropertyGroup>
@@ -34,9 +79,24 @@
     </PropertyGroup>
 
     <Target Name="GetDependencyTargetPaths">
+        <!-- Merge the collection of PackageReference and Assemblies using the NuGetPackageId key.
+             This produces a new list containing the DLL path and the "IncludeInPackage" metadata-->
+        <JoinItems Left="@(ResolvedCompileFileDefinitions)" LeftKey="NuGetPackageId" LeftMetadata="*"
+                   Right="@(PackageReference)" RightKey="" RightMetadata="*"
+                   ItemSpecToUse="Left">
+            <Output TaskParameter="JoinResult" ItemName="_PackagesToPack"/>
+        </JoinItems>
+
         <ItemGroup>
-            <TargetPathWithTargetPlatformMoniker Include="$(PKGNewtonsoft_Json)\lib\netstandard2.0\Newtonsoft.Json.dll" IncludeRuntimeDependency="false"/>
+            <!-- Remove NETStandard DLLs -->
+            <_PackagesToPack Remove="@(_PackagesToPack)" Condition="%(NuGetPackageId) == 'NETStandard.Library'"/>
+            <_PackagesToPack Remove="@(_PackagesToPack)" Condition="%(_PackagesToPack.IncludeInPackage) != 'true'"/>
+        </ItemGroup>
+
+        <Message Importance="High" Text="Adding DLLs from the following packages: @(_PackagesToPack->'%(NuGetPackageId)')"/>
+
+        <ItemGroup>
+            <TargetPathWithTargetPlatformMoniker Include="@(_PackagesToPack)" IncludeRuntimeDependency="false"/>
         </ItemGroup>
     </Target>
-
 </Project>
