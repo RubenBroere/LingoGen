@@ -8,6 +8,9 @@
         <IsRoslynComponent>true</IsRoslynComponent>
 
         <RootNamespace>LingoGen.Generator</RootNamespace>
+        
+        <!-- Suppress RS2008: Enable analyzer release tracking -->
+        <NoWarn>RS2008</NoWarn>
     </PropertyGroup>
 
     <!-- Package information -->
@@ -26,12 +29,10 @@
         <PackageIcon>icon.png</PackageIcon>
     </PropertyGroup>
 
-    <!-- Analyzer Releases -->
     <ItemGroup>
         <None Include="..\..\README.md" Pack="true" PackagePath="\"/>
         <None Include="..\..\icon.png" Pack="true" PackagePath="\"/>
         <None Include="..\..\LICENSE" Pack="true" PackagePath="\"/>
-        <AdditionalFiles Include="AnalyzerReleases\*.md"/>
     </ItemGroup>
 
     <!-- Analyzer Dependencies -->
