@@ -4,6 +4,7 @@ public class Examples
 {
     public Examples()
     {
-        var x = Lingo.SorryForTheInconvenience;
+        Lingo.SelectAn_("Item");
+        Lingo.The_Is_("Item", "Awesome");
     }
 }

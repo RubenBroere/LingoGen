@@ -30,6 +30,6 @@ public static class JsonExtensions
         var location = Location.Create(path, new(),
             new(new(info.LineNumber - 1, info.LinePosition - 1), new(info.LineNumber - 1, info.LinePosition - 1)));
 
-        return Diagnostic.Create(Diagnostics.InvalidJsonFormat, location, e.Message);
+        return Diagnostic.Create(Diagnostics.JsonException, location, e.Message);
     }
 }
