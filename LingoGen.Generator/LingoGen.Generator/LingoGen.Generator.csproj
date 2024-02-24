@@ -8,11 +8,29 @@
         <IsRoslynComponent>true</IsRoslynComponent>
 
         <RootNamespace>LingoGen.Generator</RootNamespace>
-        <PackageId>LingoGen.Generator</PackageId>
+    </PropertyGroup>
+
+    <!-- Package information -->
+    <PropertyGroup>
+        <EnablePackageValidation>true</EnablePackageValidation>
+        
+        <Version>0.1.0</Version>
+        <PackageId>RubenBroere.LingoGen</PackageId>
+        <PackageTags>roslyn, source generator, csharp, localization</PackageTags>
+        <RepositoryUrl>https://github.com/RubenBroere/lingo-gen</RepositoryUrl>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <PackageProjectUrl>https://github.com/RubenBroere/lingo-gen</PackageProjectUrl>
+        <PackageLicenseFile>LICENSE</PackageLicenseFile>
+        <Description>A Roslyn source generator for statically typed string localization</Description>
+        <Authors>Ruben Broere</Authors>
+        <PackageIcon>icon.png</PackageIcon>
     </PropertyGroup>
 
     <!-- Analyzer Releases -->
     <ItemGroup>
+        <None Include="..\..\README.md" Pack="true" PackagePath="\"/>
+        <None Include="..\..\icon.png" Pack="true" PackagePath="\"/>
+        <None Include="..\..\LICENSE" Pack="true" PackagePath="\"/>
         <AdditionalFiles Include="AnalyzerReleases\*.md"/>
     </ItemGroup>
 
@@ -54,7 +72,7 @@
                   Visible="false"/>
         </ItemGroup>
     </Target>
-   
+
     <!-- https://github.com/dotnet/roslyn/discussions/47517-->
     <PropertyGroup>
         <GetTargetPathDependsOn>$(GetTargetPathDependsOn);GetDependencyTargetPaths</GetTargetPathDependsOn>
