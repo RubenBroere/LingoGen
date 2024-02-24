@@ -26,7 +26,7 @@ public class ClassBuilder
           {{String.Join("\n", _usingDeclarations.Select(u => $"using {u};"))}}
 
           namespace {{_namespace}};
-          {{(_summary != null ? Summary : "\n")}}
+          {{(_summary != null ? Summary : "")}}
           public {{(_isStatic ? "static" : "")}} {{(_isPartial ? "partial" : "")}} class {{_className}}
           {
           {{_body}}
