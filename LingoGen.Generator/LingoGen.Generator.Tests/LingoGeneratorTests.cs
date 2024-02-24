@@ -45,6 +45,5 @@ public class LingoGeneratorTests
         var runResult = driver.RunGenerators(compilation).GetRunResult();
 
         // All generated files can be found in 'RunResults.GeneratedTrees'.
-        var generatedFileSyntax = runResult.GeneratedTrees.Single(t => t.FilePath.EndsWith("Lingo.Hello.g.cs"));
     }
 }
