@@ -9,20 +9,20 @@
       "fr": "Désolé pour le dérangement."
     },
     "Goodbye": {
-      "nl": "Tot ziens"
+      "nl": "Tot ziens",
+      "fr": "Au revoir"
     },
     "Hello": {
       "nl": "Hallo",
-      "fr": "Bonjour",
-      "de": "Hallo"
+      "fr": "Bonjour"
     },
     "Select a(n) {Noun}": {
       "nl": "Selecteer een {Noun}",
       "fr": "Sélectionnez un(e) {Noun}"
     },
     "The {Noun} is {Adjective}": {
-      "nl": "De {Noun} is {Adjective} en {Extra}",
-      "fr": "Le {Noun}"
+      "nl": "De {Noun} is {Adjective}",
+      "fr": "Le {Noun} est {Adjective}"
     }
   },
   "nouns": {
