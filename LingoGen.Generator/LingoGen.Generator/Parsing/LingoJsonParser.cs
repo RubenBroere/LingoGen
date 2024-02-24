@@ -133,10 +133,17 @@ public class LingoJsonParser
             Report(property.Value, Diagnostics.JsonException, e.Message);
             return null;
         }
+        
+        var key = CreateKey(property);
+        if (key is null)
+        {
+            Report(property, Diagnostics.InvalidJsonFormat, "Key is empty or invalid");
+            return null;
+        }
 
         var phrase = new LingoPhrase
         {
-            Key = CreateKey(property.Name),
+            Key = key,
             Translations = translations
         };
 
@@ -178,17 +185,27 @@ public class LingoJsonParser
         return phrase;
     }
 
-    private static string CreateKey(string input)
+    private string? CreateKey(JProperty property)
     {
+        var name = property.Name;
+        
         var sb = new StringBuilder();
 
         var nextIsUpper = false;
         var inBraces = false;
         
-        // TODO: What if the input is empty?
-        // TODO: What if the input starts with an number?
+        // Check if the name is empty
+        if (String.IsNullOrWhiteSpace(name))
+            return null;
+
+        // Add underscore if the first character is a number
+        if (Char.IsDigit(name.FirstOrDefault()))
+        {
+            Report(property, Diagnostics.KeyStartsWithDigit, name);
+            sb.Append("d");
+        }
         
-        foreach (var c in input)
+        foreach (var c in name)
         {
             if (Char.IsLetterOrDigit(c) && !inBraces)
             {

@@ -10,9 +10,9 @@ public static class Diagnostics
         "LingoGen",
         DiagnosticSeverity.Warning, true);
 
-    public static readonly DiagnosticDescriptor NoEntriesWarning = new("LINGO1001",
-        "No entries in lingo.json",
-        "No entries in {0}",
+    public static readonly DiagnosticDescriptor KeyStartsWithDigit = new("LINGO1002",
+        "Key starts with a number",
+        "The key '{0}' starts with a digit, prefixing with 'd'",
         "LingoGen",
         DiagnosticSeverity.Warning, true);
 
