@@ -1,14 +1,12 @@
-name: publish
+name: CI
 on:
-  workflow_dispatch: # Allow running the workflow manually from the GitHub UI
+  workflow_dispatch:
   push:
-    branches: [ main, development ]       # Run the workflow when pushing to the main branch
+    branches: [ main, development ]
+    tags-ignore:
+      - "v[0-9]+.[0-9]+.[0-9]+" # Ignore tags that match the pattern v1.2.3
   pull_request:
-    branches: [ main, development ]       # Run the workflow for pull requests to the main branch
-  release:
-    branches: [ main ]
-    types:
-      - published    # Run the workflow when a new GitHub release is published
+    branches: [ main, development ]
 
 env:
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
@@ -74,30 +72,3 @@ jobs:
         uses: actions/setup-dotnet@v4
       - name: Run tests
         run: dotnet test --configuration Release
-
-  deploy:
-    # Publish only when creating a GitHub Release
-    # https://docs.github.com/en/repositories/releasing-projects-on-github/managing-releases-in-a-repository
-    # You can update this logic if you want to manage releases differently
-    if: github.event_name == 'release'
-    runs-on: ubuntu-latest
-    needs: [ validate_nuget, run_test ]
-    steps:
-      # Download the NuGet package created in the previous job
-      - uses: actions/download-artifact@v3
-        with:
-          name: nuget
-          path: ${{ env.NuGetDirectory }}
-
-      # Install the .NET SDK indicated in the global.json file
-      - name: Setup .NET Core
-        uses: actions/setup-dotnet@v4
-
-      # Publish all NuGet packages to NuGet.org
-      # Use --skip-duplicate to prevent errors if a package with the same version already exists.
-      # If you retry a failed workflow, already published packages will be skipped without error.
-      - name: Publish NuGet package
-        run: |
-          foreach($file in (Get-ChildItem "${{ env.NuGetDirectory }}" -Recurse -Include *.nupkg)) {
-              dotnet nuget push $file --api-key "${{ secrets.NUGET_APIKEY }}" --source https://api.nuget.org/v3/index.json --skip-duplicate
-          }
