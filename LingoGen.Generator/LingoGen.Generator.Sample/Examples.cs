@@ -4,7 +4,6 @@ public class Examples
 {
     public Examples()
     {
-        Lingo.SelectAn_("Item");
-        Lingo.The_Is_("Item", "Awesome");
+        Console.WriteLine($"{Lingo.Hello} user");
     }
 }

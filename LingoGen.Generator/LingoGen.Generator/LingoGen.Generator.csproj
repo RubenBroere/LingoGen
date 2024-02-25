@@ -20,9 +20,9 @@
         <Version>0.1.0</Version>
         <PackageId>RubenBroere.LingoGen</PackageId>
         <PackageTags>roslyn, source generator, csharp, localization</PackageTags>
-        <RepositoryUrl>https://github.com/RubenBroere/lingo-gen</RepositoryUrl>
+        <RepositoryUrl>https://github.com/RubenBroere/LingoGen</RepositoryUrl>
         <PackageReadmeFile>README.md</PackageReadmeFile>
-        <PackageProjectUrl>https://github.com/RubenBroere/lingo-gen</PackageProjectUrl>
+        <PackageProjectUrl>https://github.com/RubenBroere/LingoGen</PackageProjectUrl>
         <PackageLicenseFile>LICENSE</PackageLicenseFile>
         <Description>A Roslyn source generator for statically typed string localization</Description>
         <Authors>Ruben Broere</Authors>
