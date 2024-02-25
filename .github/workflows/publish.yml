@@ -1,0 +1,36 @@
+name: publish
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - "v[0-9]+.[0-9]+.[0-9]+"
+
+env:
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
+  DOTNET_NOLOGO: true
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+
+      - name: Set VERSION variable from tag
+        run: echo "VERSION=${GITHUB_REF/refs\/tags\/v/}" >> $GITHUB_ENV
+      - name: Build
+        run: dotnet build -c Release /p:Version=${VERSION}
+      - name: Test
+        run: dotnet test -c Release /p:Version=${VERSION} --no-build
+      - name: Pack
+        run: dotnet pack -c Release /p:Version=${VERSION} --no-build --output .
+      - name: Install nuget validator
+        run: dotnet tool update Meziantou.Framework.NuGetPackageValidation.Tool --global
+      - name: Validate package
+        run: meziantou.validate-nuget-package RubenBroere.LingoGen.${VERSION}.nupkg --excluded-rule-ids 111
+      - name: Push
+        run: dotnet nuget push RubenBroere.LingoGen.${VERSION}.nupkg --api-key "${{ secrets.NUGET_APIKEY }}" --source https://api.nuget.org/v3/index.json --skip-duplicate

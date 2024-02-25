@@ -19,10 +19,6 @@
     "Select a(n) {Noun}": {
       "nl": "Selecteer een {Noun}",
       "fr": "Sélectionnez un(e) {Noun}"
-    },
-    "The {Noun} is {Adjective}": {
-      "nl": "De {Noun} is {Adjective}",
-      "fr": "Le {Noun} est {Adjective}"
     }
   },
   "nouns": {
