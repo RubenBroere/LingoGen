@@ -48,7 +48,7 @@ public class LingoGenerator : IIncrementalGenerator
 
         if (noFiles)
         {
-            ctx.ReportDiagnostic(Diagnostic.Create(Diagnostics.NoJsonWarning, Location.None));
+            ctx.ReportDiagnostic(Diagnostic.Create(Diagnostics.NoJson, Location.None));
             return;
         }
 
