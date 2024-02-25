@@ -161,3 +161,6 @@ This will make the incremental source generator faster than one big class.
 
 - [ ] Nouns
 - [ ] Custom noun metadata
+- [ ] Icon design
+- [ ] Unit testing
+- [ ] Code fixes
