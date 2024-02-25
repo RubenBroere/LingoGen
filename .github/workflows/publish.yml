@@ -22,10 +22,8 @@ jobs:
 
       - name: Set VERSION variable from tag
         run: echo "VERSION=${GITHUB_REF/refs\/tags\/v/}" >> $GITHUB_ENV
-      - name: Build
-        run: dotnet build -c Release /p:Version=${VERSION}
       - name: Test
-        run: dotnet test -c Release /p:Version=${VERSION} --no-build
+        run: dotnet test -c Release
       - name: Pack
         run: dotnet pack -c Release /p:Version=${VERSION} --output .
       - name: Install nuget validator
