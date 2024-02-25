@@ -8,7 +8,12 @@ using Newtonsoft.Json.Linq;
 
 namespace LingoGen.Generator.Parsing;
 
-public class LingoJsonParser
+public interface ILingoJsonParser
+{
+    public ParserResult Parse(string json);
+}
+
+public class LingoJsonParser : ILingoJsonParser
 {
     private readonly string _filePath;
 
@@ -17,15 +22,13 @@ public class LingoJsonParser
 
     private readonly Regex _argumentRegex = new("(?<={)(.*?)(?=})");
 
-    private LingoJsonParser(string filePath)
+    public LingoJsonParser(string filePath)
     {
         _filePath = filePath;
     }
 
-    public static ParserResult Parse(string json, string filePath)
+    public ParserResult Parse(string json)
     {
-        var parser = new LingoJsonParser(filePath);
-
         JObject jObject;
         try
         {
@@ -33,23 +36,23 @@ public class LingoJsonParser
         }
         catch (JsonException e)
         {
-            return ParserResult.FromException(e, filePath);
+            return ParserResult.FromException(e, _filePath);
         }
 
-        if (!parser.ParseMetaData(jObject))
+        if (!ParseMetaData(jObject))
         {
             return new()
             {
-                Diagnostics = parser._diagnostics
+                Diagnostics = _diagnostics
             };
         }
 
-        parser.ParsePhrases(jObject);
+        ParsePhrases(jObject);
 
         return new()
         {
-            LingoData = parser._lingoData,
-            Diagnostics = parser._diagnostics
+            LingoData = _lingoData,
+            Diagnostics = _diagnostics
         };
     }
 
@@ -64,7 +67,7 @@ public class LingoJsonParser
         if (metaData.TryGetValue<JValue>("version", out var version) && version.Type == JTokenType.String)
         {
             var versionString = version.Value<string>();
-            if (String.IsNullOrEmpty(versionString))
+            if (String.IsNullOrWhiteSpace(versionString))
             {
                 Report(version, Diagnostics.NoVersionFound);
             }

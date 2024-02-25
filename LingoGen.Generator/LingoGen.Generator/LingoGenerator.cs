@@ -29,7 +29,9 @@ public class LingoGenerator : IIncrementalGenerator
         var codeModel = lingoFiles.Select((x, _) =>
         {
             // TODO: Use cancellation token
-            var parserResult = LingoJsonParser.Parse(x.Content, x.Path);
+            ILingoJsonParser parser = new LingoJsonParser(x.Path);
+            
+            var parserResult = parser.Parse(x.Content);
 
             return new GenerateCodeModel
             {
@@ -39,19 +41,23 @@ public class LingoGenerator : IIncrementalGenerator
 
         // TODO: Cache lingo entries
 
-        context.RegisterSourceOutput(codeModel.Combine(noFiles), GenerateCode);
+        context.RegisterSourceOutput(noFiles.Combine(codeModel.Collect()), (ctx, tuple) =>
+        {
+            if (tuple.Left)
+            {
+                ctx.ReportDiagnostic(Diagnostic.Create(Diagnostics.NoJson, Location.None));
+                return;
+            }
+            
+            foreach (var model in tuple.Right)
+            {
+                GenerateCode(ctx, model);
+            }
+        });
     }
 
-    private static void GenerateCode(SourceProductionContext ctx, (GenerateCodeModel model, bool noFiles) input)
+    private static void GenerateCode(SourceProductionContext ctx, GenerateCodeModel model)
     {
-        var (model, noFiles) = input;
-
-        if (noFiles)
-        {
-            ctx.ReportDiagnostic(Diagnostic.Create(Diagnostics.NoJson, Location.None));
-            return;
-        }
-
         foreach (var error in model.ParserResult.Diagnostics)
         {
             ctx.ReportDiagnostic(error);
