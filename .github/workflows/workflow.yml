@@ -1,15 +1,12 @@
-# yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
-
 name: publish
 on:
   workflow_dispatch: # Allow running the workflow manually from the GitHub UI
   push:
-    branches:
-      - 'main'       # Run the workflow when pushing to the main branch
+    branches: [ main, development ]       # Run the workflow when pushing to the main branch
   pull_request:
-    branches:
-      - 'main'       # Run the workflow for pull requests to the main branch
+    branches: [ main, development ]       # Run the workflow for pull requests to the main branch
   release:
+    branches: [ main ]
     types:
       - published    # Run the workflow when a new GitHub release is published
 
