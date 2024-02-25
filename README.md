@@ -9,6 +9,7 @@ LingoGen is a Roslyn source generator that generates strongly typed localized st
 - **Discoverability**: You get intellisense for all your localized strings.
 - **Performance**: The classes are build on compile time so no lookup in dictionaries.
 - **Easy to use**: Just add a json file and the required translations and you're good to go.
+- **Feedback**: LingoGen has a lot of warning and error feedback to help you create good translations.
 
 ## How to use
 
@@ -155,3 +156,8 @@ public static string SelectAn_(string Noun) => CultureInfo.CurrentUICulture.TwoL
 
 All phrases are generated in a separate file with the name of the phrase.
 This will make the incremental source generator faster than one big class. 
+
+## Roadmap
+
+- [ ] Nouns
+- [ ] Custom noun metadata
