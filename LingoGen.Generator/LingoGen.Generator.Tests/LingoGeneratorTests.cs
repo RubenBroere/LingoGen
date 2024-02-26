@@ -87,7 +87,7 @@ public class LingoGeneratorTests
     }
     
     [Fact]
-    public void MetadataWithInvalidLanguage_ReturnsInvalidJsonDiagnostic()
+    public void MetadataWithAnotherObjectAsLanguage_ReturnsInvalidJsonDiagnostic()
     {
         // Arrange
         const string json =
@@ -104,7 +104,49 @@ public class LingoGeneratorTests
         var result = RunGenerator(json);
 
         // Assert
-        result.Diagnostics.Should().ContainSingle(x => x.Id == Diagnostics.InvalidJsonFormat.Id);
+        result.Diagnostics.Should().ContainSingle(x => x.Id == Diagnostics.InvalidLanguage.Id);
+    }
+    
+    [Fact]
+    public void MetadataWithEmptyLanguage_ReturnsInvalidJsonDiagnostic()
+    {
+        // Arrange
+        const string json =
+            """
+            {
+              "metadata": {
+                "version": "1.0",
+                "languages": ["en", " "]
+              }
+            }
+            """;
+
+        // Act
+        var result = RunGenerator(json);
+
+        // Assert
+        result.Diagnostics.Should().ContainSingle(x => x.Id == Diagnostics.InvalidLanguage.Id);
+    }
+    
+    [Fact]
+    public void MetadataWithInvalidLanguage_ReturnsInvalidJsonDiagnostic()
+    {
+        // Arrange
+        const string json =
+            """
+            {
+              "metadata": {
+                "version": "1.0",
+                "languages": ["en", "cheese"]
+              }
+            }
+            """;
+
+        // Act
+        var result = RunGenerator(json);
+
+        // Assert
+        result.Diagnostics.Should().ContainSingle(x => x.Id == Diagnostics.InvalidLanguage.Id);
     }
    
     [Fact]

@@ -9,6 +9,12 @@ public static class Diagnostics
         "No lingo.json file found",
         "LingoGen",
         DiagnosticSeverity.Warning, true);
+    
+    public static readonly DiagnosticDescriptor InvalidLanguage = new("LINGO1001",
+        "Invalid language",
+        "Invalid language: {0}",
+        "LingoGen",
+        DiagnosticSeverity.Error, true);
 
     public static readonly DiagnosticDescriptor KeyStartsWithDigit = new("LINGO1002",
         "Key starts with a number",

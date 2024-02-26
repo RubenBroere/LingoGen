@@ -1,4 +1,6 @@
-﻿using System.Text;
+﻿using System.Collections.Immutable;
+using System.Globalization;
+using System.Text;
 using System.Text.RegularExpressions;
 using LingoGen.Generator.DataTypes;
 using Microsoft.CodeAnalysis;
@@ -8,24 +10,18 @@ using Newtonsoft.Json.Linq;
 
 namespace LingoGen.Generator.Parsing;
 
-public interface ILingoJsonParser
+public class LingoJsonParser(string filePath) : ILingoJsonParser
 {
-    public ParserResult Parse(string json);
-}
-
-public class LingoJsonParser : ILingoJsonParser
-{
-    private readonly string _filePath;
-
     private readonly List<Diagnostic> _diagnostics = [];
     private readonly LingoData _lingoData = new();
 
     private readonly Regex _argumentRegex = new("(?<={)(.*?)(?=})");
 
-    public LingoJsonParser(string filePath)
-    {
-        _filePath = filePath;
-    }
+    /// <summary>
+    /// All languages that are supported by the CultureInfo class 
+    /// </summary>
+    private static readonly ImmutableHashSet<string> AllLanguages =
+        CultureInfo.GetCultures(CultureTypes.NeutralCultures).Select(x => x.TwoLetterISOLanguageName).ToImmutableHashSet();
 
     public ParserResult Parse(string json)
     {
@@ -36,7 +32,7 @@ public class LingoJsonParser : ILingoJsonParser
         }
         catch (JsonException e)
         {
-            return ParserResult.FromException(e, _filePath);
+            return ParserResult.FromException(e, filePath);
         }
 
         if (!ParseMetaData(jObject))
@@ -89,16 +85,23 @@ public class LingoJsonParser : ILingoJsonParser
         {
             if (languageToken.Type != JTokenType.String)
             {
-                Report(languageToken, Diagnostics.InvalidJsonFormat, $"Language '{languageToken}' is not a string");
+                Report(languageToken, Diagnostics.InvalidLanguage, $"'{languageToken}' is not a string");
                 continue;
             }
 
             var language = languageToken.Value<string>();
-            if (String.IsNullOrEmpty(language))
+            if (String.IsNullOrWhiteSpace(language))
             {
-                Report(languageToken, Diagnostics.InvalidJsonFormat, "Language is empty");
+                Report(languageToken, Diagnostics.InvalidLanguage, "Language is empty");
                 continue;
             }
+
+            if (!AllLanguages.Contains(language!))
+            {
+                Report(languageToken, Diagnostics.InvalidLanguage, $"'{language}' is not a valid TwoLetterISOLanguageName");
+                continue;
+            }
+
 
             _lingoData.MetaData.Languages.Add(language!);
         }
@@ -114,8 +117,8 @@ public class LingoJsonParser : ILingoJsonParser
             return;
         }
 
-        // We dont need to check for duplicate keys because JObject will not allow it
-
+        // We dont need to check for duplicate keys because JObject will filter them out
+        
         foreach (var property in phrases.Properties())
         {
             var phrase = ParsePhrase(property);
@@ -136,7 +139,7 @@ public class LingoJsonParser : ILingoJsonParser
             Report(property.Value, Diagnostics.JsonException, e.Message);
             return null;
         }
-        
+
         var key = CreateKey(property);
         if (key is null)
         {
@@ -191,12 +194,12 @@ public class LingoJsonParser : ILingoJsonParser
     private string? CreateKey(JProperty property)
     {
         var name = property.Name;
-        
+
         var sb = new StringBuilder();
 
         var nextIsUpper = false;
         var inBraces = false;
-        
+
         // Check if the name is empty
         if (String.IsNullOrWhiteSpace(name))
             return null;
@@ -207,7 +210,7 @@ public class LingoJsonParser : ILingoJsonParser
             Report(property, Diagnostics.KeyStartsWithDigit, name);
             sb.Append("d");
         }
-        
+
         foreach (var c in name)
         {
             if (Char.IsLetterOrDigit(c) && !inBraces)
@@ -247,20 +250,6 @@ public class LingoJsonParser : ILingoJsonParser
         var linePositionSpan = new LinePositionSpan(startPosition, endPosition);
 
 
-        _diagnostics.Add(Diagnostic.Create(descriptor, Location.Create(_filePath, textSpan, linePositionSpan), messageArgs));
-    }
-}
-
-public sealed class ParserResult
-{
-    public LingoData LingoData { get; set; } = new();
-
-    public List<Diagnostic> Diagnostics { get; set; } = [];
-
-    public static ParserResult FromException(JsonException e, string filePath)
-    {
-        var parserResult = new ParserResult();
-        parserResult.Diagnostics.Add(e.ToDiagnostic(filePath));
-        return parserResult;
+        _diagnostics.Add(Diagnostic.Create(descriptor, Location.Create(filePath, textSpan, linePositionSpan), messageArgs));
     }
 }
