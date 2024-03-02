@@ -4,7 +4,7 @@
 
 LingoGen is a Roslyn source generator that generates strongly typed localized strings from a json file.
 This allows you to use localized strings in your code with compile time safety and intellisense.
-This project is currently in development and I would love to hear any feedback on extra features or tweaks to the current ones.
+This project is currently in early development and I would love to hear any feedback on extra features or tweaks to the current ones.
 
 
 ## Why strongly typed localized strings?
