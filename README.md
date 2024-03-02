@@ -1,3 +1,5 @@
+<img style="float: right;" width="160px" height="160px" src="icon.png" alt="LingoGen logo">
+
 # LingoGen
 
 LingoGen is a Roslyn source generator that generates strongly typed localized strings from a json file.
@@ -161,3 +163,5 @@ This will make the incremental source generator faster than one big class.
 
 - [ ] Nouns
 - [ ] Custom noun metadata
+- [ ] Code fixes
+- [ ] More unit tests

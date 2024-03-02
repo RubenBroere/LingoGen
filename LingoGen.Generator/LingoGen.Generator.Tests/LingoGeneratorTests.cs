@@ -1,49 +1,182 @@
-using LingoGen.Generator.Tests.Utils;
-using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
-using Xunit;
-
 namespace LingoGen.Generator.Tests;
 
 public class LingoGeneratorTests
 {
-    private const string LingoJson =
-        """
-        {
-            "Hello": {
-                "en" : "Hello",
-                "nl" : "Hallo"
-            },
-            "World": {
-                "en" : "World",
-                "nl" : "Wereld"
-            }
-        }
-        """;
+    [Fact]
+    public void InvalidJson_ReturnsJsonExceptionDiagnostic()
+    {
+        // Arrange
+        const string json = "{ invalid json }";
+
+        // Act
+        var result = RunGenerator(json);
+
+        // Assert
+        result.Diagnostics.Should().ContainSingle(x => x.Id == Diagnostics.JsonException.Id);
+    }
+    
+    [Fact]
+    public void EmptyLingoJson_ReturnsNoMetaDataDiagnostic()
+    {
+        // Arrange
+        const string json = "{ }";
+
+        // Act
+        var result = RunGenerator(json);
+
+        // Assert
+        result.Diagnostics.Should().ContainSingle(x => x.Id == Diagnostics.NoMetaData.Id);
+    }
 
     [Fact]
-    public void GenerateLingoClasses()
+    public void MetadataWithoutVersion_ReturnsNoVersionDiagnostic()
     {
-        // Create an instance of the source generator.
-        var generator = new LingoGenerator();
-
-        // Source generators should be tested using 'GeneratorDriver'.
-        var driver = CSharpGeneratorDriver.Create(
-            new[] { generator.AsSourceGenerator() },
-            new[] { new TestAdditionalFile("lingo.json", LingoJson) });
-
-        // We need to create a compilation with the required source code.
-        var compilation = CSharpCompilation.Create(nameof(LingoGeneratorTests),
-            Enumerable.Empty<SyntaxTree>(),
-            new[]
+        // Arrange
+        const string json =
+            """
             {
-                // To support 'System.Attribute' inheritance, add reference to 'System.Private.CoreLib'.
-                MetadataReference.CreateFromFile(typeof(object).Assembly.Location)
-            });
+              "metadata": { }
+            }
+            """;
 
-        // Run generators and retrieve all results.
-        var runResult = driver.RunGenerators(compilation).GetRunResult();
+        // Act
+        var result = RunGenerator(json);
 
-        // All generated files can be found in 'RunResults.GeneratedTrees'.
+        // Assert
+        result.Diagnostics.Should().ContainSingle(x => x.Id == Diagnostics.NoVersionFound.Id);
+    }
+    
+    [Fact]
+    public void MetadataWithEmptyVersion_ReturnsNoVersionDiagnostic()
+    {
+        // Arrange
+        const string json =
+            """
+            {
+              "metadata": {
+                version: " "
+              }
+            }
+            """;
+
+        // Act
+        var result = RunGenerator(json);
+
+        // Assert
+        result.Diagnostics.Should().ContainSingle(x => x.Id == Diagnostics.NoVersionFound.Id);
+    }
+    
+    [Fact]
+    public void MetadataWithoutLanguage_ReturnsNoLanguageDiagnostic()
+    {
+        // Arrange
+        const string json =
+            """
+            {
+              "metadata": {
+                "version": "1.0"
+              }
+            }
+            """;
+
+        // Act
+        var result = RunGenerator(json);
+
+        // Assert
+        result.Diagnostics.Should().ContainSingle(x => x.Id == Diagnostics.NoLanguagesFound.Id);
+    }
+    
+    [Fact]
+    public void MetadataWithAnotherObjectAsLanguage_ReturnsInvalidJsonDiagnostic()
+    {
+        // Arrange
+        const string json =
+            """
+            {
+              "metadata": {
+                "version": "1.0",
+                "languages": ["en", 123]
+              }
+            }
+            """;
+
+        // Act
+        var result = RunGenerator(json);
+
+        // Assert
+        result.Diagnostics.Should().ContainSingle(x => x.Id == Diagnostics.InvalidLanguage.Id);
+    }
+    
+    [Fact]
+    public void MetadataWithEmptyLanguage_ReturnsInvalidJsonDiagnostic()
+    {
+        // Arrange
+        const string json =
+            """
+            {
+              "metadata": {
+                "version": "1.0",
+                "languages": ["en", " "]
+              }
+            }
+            """;
+
+        // Act
+        var result = RunGenerator(json);
+
+        // Assert
+        result.Diagnostics.Should().ContainSingle(x => x.Id == Diagnostics.InvalidLanguage.Id);
+    }
+    
+    [Fact]
+    public void MetadataWithInvalidLanguage_ReturnsInvalidJsonDiagnostic()
+    {
+        // Arrange
+        const string json =
+            """
+            {
+              "metadata": {
+                "version": "1.0",
+                "languages": ["en", "cheese"]
+              }
+            }
+            """;
+
+        // Act
+        var result = RunGenerator(json);
+
+        // Assert
+        result.Diagnostics.Should().ContainSingle(x => x.Id == Diagnostics.InvalidLanguage.Id);
+    }
+   
+    [Fact]
+    public void NoPhrases_ReturnsNoPhrasesDiagnostic()
+    {
+        // Arrange
+        const string json =
+            """
+            {
+              "metadata": {
+                "version": "1.0",
+                "languages": ["en", "nl"]
+              }
+            }
+            """;
+
+        // Act
+        var result = RunGenerator(json);
+
+        // Assert
+        result.Diagnostics.Should().ContainSingle(x => x.Id == Diagnostics.NoPhrasesFound.Id);
+    }
+    
+    [Fact]
+    public void NoLingoJson_ReturnsNoJsonDiagnostic()
+    {
+        // Act
+        var result = RunGenerator();
+
+        // Assert
+        result.Diagnostics.Should().ContainSingle(x => x.Id == Diagnostics.NoJson.Id);
     }
 }
