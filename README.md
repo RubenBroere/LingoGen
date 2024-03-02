@@ -1,4 +1,4 @@
-<img style="float: right;" width="160px" height="160px" src="icon.png" alt="LingoGen logo">
+<img align="right" width="128" height="128" src="icon.png" alt="LingoGen logo">
 
 # LingoGen
 
