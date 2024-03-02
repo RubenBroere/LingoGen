@@ -118,7 +118,7 @@ public class LingoJsonParser(string filePath) : ILingoJsonParser
         }
 
         // We dont need to check for duplicate keys because JObject will filter them out
-        
+
         foreach (var property in phrases.Properties())
         {
             var phrase = ParsePhrase(property);
