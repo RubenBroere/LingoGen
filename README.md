@@ -1,8 +1,11 @@
-<img style="float: right;" width="160px" height="160px" src="icon.png" alt="LingoGen logo">
+# LingoGen [![Build Status](https://github.com/RubenBroere/LingoGen/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/RubenBroere/LingoGen/actions) [![NuGet](https://img.shields.io/nuget/v/RubenBroere.LingoGen.svg)](https://www.nuget.org/packages/RubenBroere.LingoGen/) 
 
-# LingoGen
+<img align="right" width="128" height="128" src="icon.png" alt="LingoGen logo">
 
 LingoGen is a Roslyn source generator that generates strongly typed localized strings from a json file.
+This allows you to use localized strings in your code with compile time safety and intellisense.
+This project is currently in early development and I would love to hear any feedback on extra features or tweaks to the current ones.
+
 
 ## Why strongly typed localized strings?
 
