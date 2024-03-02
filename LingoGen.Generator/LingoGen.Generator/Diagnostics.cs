@@ -4,11 +4,17 @@ namespace LingoGen.Generator;
 
 public static class Diagnostics
 {
-    public static readonly DiagnosticDescriptor NoJsonWarning = new("LINGO1000",
+    public static readonly DiagnosticDescriptor NoJson = new("LINGO1000",
         "No lingo.json file found",
         "No lingo.json file found",
         "LingoGen",
         DiagnosticSeverity.Warning, true);
+    
+    public static readonly DiagnosticDescriptor InvalidLanguage = new("LINGO1001",
+        "Invalid language",
+        "Invalid language: {0}",
+        "LingoGen",
+        DiagnosticSeverity.Error, true);
 
     public static readonly DiagnosticDescriptor KeyStartsWithDigit = new("LINGO1002",
         "Key starts with a number",
