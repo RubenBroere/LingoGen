@@ -1,6 +1,6 @@
-<img align="right" width="128" height="128" src="icon.png" alt="LingoGen logo">
-
 # LingoGen
+
+<img align="right" width="128" height="128" src="icon.png" alt="LingoGen logo">
 
 LingoGen is a Roslyn source generator that generates strongly typed localized strings from a json file.
 
