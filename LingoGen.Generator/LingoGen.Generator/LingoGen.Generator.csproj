@@ -8,7 +8,7 @@
         <IsRoslynComponent>true</IsRoslynComponent>
 
         <RootNamespace>LingoGen.Generator</RootNamespace>
-        
+
         <!-- Suppress RS2008: Enable analyzer release tracking -->
         <NoWarn>RS2008</NoWarn>
     </PropertyGroup>
@@ -16,7 +16,7 @@
     <!-- Package information -->
     <PropertyGroup>
         <EnablePackageValidation>true</EnablePackageValidation>
-        
+
         <PackageId>RubenBroere.LingoGen</PackageId>
         <PackageTags>roslyn, source generator, csharp, localization</PackageTags>
         <RepositoryUrl>https://github.com/RubenBroere/LingoGen</RepositoryUrl>

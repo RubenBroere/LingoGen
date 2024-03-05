@@ -6,15 +6,13 @@ namespace LingoGen.Generator;
 [Generator(LanguageNames.CSharp)]
 public class LingoGenerator : IIncrementalGenerator
 {
-    public const string Namespace = "LingoGen";
-
     public void Initialize(IncrementalGeneratorInitializationContext context)
     {
         // Initialize the compilation with the lingo class 
         context.RegisterPostInitializationOutput(ctx =>
         {
-            var cb = ClassBuilder.Create("Lingo", Namespace).AsStatic().AsPartial().WithSummary("Static class containing all lingo entries.");
-            ctx.AddSource("Lingo.g.cs", cb.ToString());
+            ctx.AddSource("Lingo.g.cs", Classes.Lingo);
+            ctx.AddSource("Lingo.Content.g.cs", Classes.Content);
         });
 
         // Cache file contents
@@ -30,7 +28,7 @@ public class LingoGenerator : IIncrementalGenerator
         {
             // TODO: Use cancellation token
             ILingoJsonParser parser = new LingoJsonParser(x.Path);
-            
+
             var parserResult = parser.Parse(x.Content);
 
             return new GenerateCodeModel
@@ -48,7 +46,7 @@ public class LingoGenerator : IIncrementalGenerator
                 ctx.ReportDiagnostic(Diagnostic.Create(Diagnostics.NoJson, Location.None));
                 return;
             }
-            
+
             foreach (var model in tuple.Right)
             {
                 GenerateCode(ctx, model);
@@ -65,8 +63,8 @@ public class LingoGenerator : IIncrementalGenerator
 
         foreach (var phrase in model.ParserResult.LingoData.Phrases)
         {
-            var source = LingoClass.Create(phrase);
-            ctx.AddSource($"Lingo.{phrase.Key}.g.cs", source);
+            var source = LingoClass.BuildPhrase(phrase);
+            ctx.AddSource($"Lingo.Phrase.{phrase.Key}.g.cs", source);
         }
     }
 }
