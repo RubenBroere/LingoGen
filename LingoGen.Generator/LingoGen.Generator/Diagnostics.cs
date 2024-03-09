@@ -82,7 +82,6 @@ public static class Diagnostics
         "LingoGen",
         DiagnosticSeverity.Error, true);
 
-    // TODO: Use this diagnostic
     public static readonly DiagnosticDescriptor PhraseNounDuplicate = new("LINGO1013",
         "There already exists a noun for this phrase",
         "Noun '{0}' has a value for the phrase '{1}'",

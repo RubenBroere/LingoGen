@@ -42,10 +42,12 @@ public class LingoJsonParser(string filePath) : ILingoJsonParser
                 Diagnostics = _diagnostics
             };
         }
+        
+        // Parse nouns over phrases because phrases might be duplicates of nouns
+        ParseNouns(jObject);
 
         ParsePhrases(jObject);
 
-        ParseNouns(jObject);
 
         return new()
         {
@@ -147,6 +149,13 @@ public class LingoJsonParser(string filePath) : ILingoJsonParser
         if (key is null)
         {
             Report(jProperty, Diagnostics.InvalidJsonFormat, "Key is empty or invalid");
+            return null;
+        }
+
+        // TODO: Support both noun phrase keys
+        foreach (var noun in _lingoData.Nouns.Where(noun => noun.Key == key))
+        {
+            Report(jProperty, Diagnostics.PhraseNounDuplicate, noun, key);
             return null;
         }
 

@@ -1,11 +1,14 @@
-# LingoGen [![Build Status](https://github.com/RubenBroere/LingoGen/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/RubenBroere/LingoGen/actions) [![NuGet](https://img.shields.io/nuget/v/RubenBroere.LingoGen.svg)](https://www.nuget.org/packages/RubenBroere.LingoGen/) 
+# LingoGen [![Build Status](https://github.com/RubenBroere/LingoGen/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/RubenBroere/LingoGen/actions) [![NuGet](https://img.shields.io/nuget/v/RubenBroere.LingoGen.svg)](https://www.nuget.org/packages/RubenBroere.LingoGen/)
 
 <img align="right" width="128" height="128" src="icon.png" alt="LingoGen logo">
 
 LingoGen is a Roslyn source generator that generates strongly typed localized strings from a json file.
 This allows you to use localized strings in your code with compile time safety and intellisense.
-This project is currently in early development and I would love to hear any feedback on extra features or tweaks to the current ones.
+This project is currently in early development and I would love to hear any feedback on extra features or tweaks to the
+current ones.
 
+LingoGen is tested on .NET 8 and C# 12 as of now.
+It may work on older versions but it's not tested on those versions.
 
 ## Why strongly typed localized strings?
 
@@ -20,7 +23,7 @@ This project is currently in early development and I would love to hear any feed
 
 1. Add the `RubenBroere.LingoGen` package to your project.
 2. Create a [lingo.json](#lingo-json) file with the translations.
-3. Add the [lingo.json](#lingo-json) file to your `.csproj` as an `AdditionalFiles` item.   
+3. Add the [lingo.json](#lingo-json) file to your `.csproj` as an `AdditionalFiles` item.
 4. Use the generated classes in your code.
 
 ```csharp
@@ -50,7 +53,7 @@ Metadata stores global configuration and is required for LingoGen to work.
 {
   "metadata": {
     "version": "0.0.0",
-    "languages": ["nl", "fr"] 
+    "languages": ["nl", "fr"]
   }
 }
 ```
@@ -58,8 +61,8 @@ Metadata stores global configuration and is required for LingoGen to work.
 - `version` (optional): The version of the lingo file. May be used for future features.
 - `languages` (required): An array of languages that are supported by the lingo file. English is always supported.
 
-LingoGen uses `CultureInfo.CurrentUICulture.TwoLetterISOLanguageName` to determine the current language. 
-If the current language is not supported, an error string will be returned. 
+LingoGen uses `CultureInfo.CurrentUICulture.TwoLetterISOLanguageName` to determine the current language.
+If the current language is not supported, an error string will be returned.
 
 ### Phrases
 
@@ -80,10 +83,11 @@ Phrases are the main feature as of now. They are the localized strings that are 
 }
 ```
 
-- `phrases` (required): A dictionary of english phrases with the required translations for the languages specified in the metadata. 
+- `phrases` (required): A dictionary of english phrases with the required translations for the languages specified in
+  the metadata.
 
 A phrase can contain arguments which are enclosed in curly braces.
-This phrase will generate a method with the arguments as parameters. 
+This phrase will generate a method with the arguments as parameters.
 
 ### Nouns
 
@@ -110,7 +114,8 @@ Nouns are currently not supported but will be in the future.
 
 ## Lingo generated classes
 
-The lingo generated classes are generated in the namespace `LingoGen` and are named after the keywords inside the [lingo.json](#lingo-json).
+The lingo generated classes are generated in the namespace `LingoGen` and are named after the keywords inside
+the [lingo.json](#lingo-json).
 
 ### Phrases
 
@@ -132,39 +137,48 @@ The lingo generated classes are generated in the namespace `LingoGen` and are na
 These example phrases will generate the following property and method:
 
 ```csharp
-// In 'Lingo.SorryForTheInconvenience.g.cs' 
+// In 'Lingo.Phrase.SorryForTheInconvenience.g.cs' 
 
 /// <summary>
 /// Sorry for the inconvenience.
 /// </summary>
-public static string SorryForTheInconvenience => CultureInfo.CurrentUICulture.TwoLetterISOLanguageName switch
-{
-    "nl" => "Sorry voor het ongemak.",
-    "fr" => "Désolé pour le dérangement.",
-    "en" => "Sorry for the inconvenience.",
-    _ => $"[ No 'SorryForTheInconvenience' lingo for '{CultureInfo.CurrentUICulture.TwoLetterISOLanguageName}' ]"
-};
+public static Content SorryForTheInconvenience { get; } = new SorryForTheInconvenienceContent();
 
-// In 'Lingo.SelectAn_.g.cs'
+private sealed class SorryForTheInconvenienceContent : Content
+{
+    public override string? ToString(string languageCode) => languageCode switch
+    {
+        "nl" => "Sorry voor het ongemak.",
+        "fr" => "Désolé pour le dérangement.",
+        "en" => "Sorry for the inconvenience.",
+        _ => null
+    };
+}
+
+// In 'Lingo.Phrase.SelectAn_.g.cs'
 
 /// <summary>
 /// Select a(n) {Noun}
 /// </summary>
-public static string SelectAn_(string Noun) => CultureInfo.CurrentUICulture.TwoLetterISOLanguageName switch
+public static Content SelectAn_(string Noun) => new SelectAn_Content(Noun);
+
+private sealed class SelectAn_Content(string Noun) : Content
 {
-    "nl" => $"Selecteer een {Noun}",
-    "fr" => $"Sélectionnez un(e) {Noun}",
-    "en" => $"Select a(n) {Noun}",
-    _ => $"[ No 'SelectAn_' lingo for '{CultureInfo.CurrentUICulture.TwoLetterISOLanguageName}' ]"
-};
+    public override string? ToString(string languageCode) => languageCode switch
+    {
+        "nl" => $"Selecteer een {Noun}",
+        "fr" => $"Sélectionnez un(e) {Noun}",
+        "en" => $"Select a(n) {Noun}",
+        _ => null
+    };
+}
 ```
 
 All phrases are generated in a separate file with the name of the phrase.
-This will make the incremental source generator faster than one big class. 
+This will make the incremental source generator faster than one big class.
 
 ## Roadmap
 
-- [ ] Nouns
+- [ ] Extension methods for argument phrases
 - [ ] Custom noun metadata
 - [ ] Code fixes
-- [ ] More unit tests
