@@ -12,7 +12,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <AdditionalFiles Include="lingo.json" />
+        <AdditionalFiles Include="lingo.json"/>
     </ItemGroup>
 
 </Project>
