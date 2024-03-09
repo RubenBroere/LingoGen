@@ -86,11 +86,17 @@ public static class Diagnostics
         "There already exists a noun for this phrase",
         "Noun '{0}' has a value for the phrase '{1}'",
         "LingoGen",
-        DiagnosticSeverity.Error, true);
+        DiagnosticSeverity.Warning, true);
     
     public static readonly DiagnosticDescriptor NounIsIncomplete = new("LINGO1014",
         "Noun is incomplete",
         "Noun '{0}' is incomplete for '{1}'",
+        "LingoGen",
+        DiagnosticSeverity.Error, true);
+    
+    public static readonly DiagnosticDescriptor UnfinishedDescriptor = new("LINGO1111",
+        "Unfinished descriptor",
+        "Unfinished descriptor: {0}",
         "LingoGen",
         DiagnosticSeverity.Error, true);
 }
