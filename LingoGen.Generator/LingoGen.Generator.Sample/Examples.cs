@@ -5,10 +5,10 @@ public class Examples
     public Examples()
     {
         // Logs "ERROR: Users"
-        LogTranslatedError(Lingo.Person.Singular.Capitalized());
+        LogTranslatedError(Lingo.Nouns.Person.Singular.Capitalized());
 
         // Logs "ERROR: Select a(n) user"
-        LogTranslatedError(Lingo.SelectAn_(Lingo.Person.Singular));
+        LogTranslatedError(Lingo.Phrases.SelectAn_(Lingo.Nouns.Person.Singular));
     }
 
     private static void LogTranslatedError(Content content)

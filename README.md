@@ -34,8 +34,12 @@ public class MyClass
     public void MyMethod()
     {
         // From the lingo.json phrase "Sorry for the inconvenience."
-        Console.WriteLine(Lingo.SorryForTheInconvenience);
+        Console.WriteLine(Lingo.Phrases.SorryForTheInconvenience);
         // Returns "Sorry voor het ongemak." if the current UI culture is Dutch. 
+        
+        // From the lingo.json noun "World"
+        Console.WriteLine(Lingo.Nouns.World.PluralCapitalized);
+        // Returns "Mondes" if the current UI culture is French.
     }
 }
 ```
@@ -179,6 +183,6 @@ This will make the incremental source generator faster than one big class.
 
 ## Roadmap
 
-- [ ] Extension methods for argument phrases
 - [ ] Custom noun metadata
 - [ ] Code fixes
+- [ ] Extension methods for argument phrases

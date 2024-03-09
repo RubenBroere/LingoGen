@@ -42,7 +42,7 @@ public class LingoJsonParser(string filePath) : ILingoJsonParser
                 Diagnostics = _diagnostics
             };
         }
-        
+
         // Parse nouns over phrases because phrases might be duplicates of nouns
         ParseNouns(jObject);
 
@@ -152,11 +152,12 @@ public class LingoJsonParser(string filePath) : ILingoJsonParser
             return null;
         }
 
-        // TODO: Support both noun phrase keys
-        foreach (var noun in _lingoData.Nouns.Where(noun => noun.Key == key))
+
+        var duplicateNoun = _lingoData.Nouns.Where(x => x.Singular["en"].Equals(key, StringComparison.OrdinalIgnoreCase) ||
+                                                        x.Plural["en"].Equals(key, StringComparison.OrdinalIgnoreCase));
+        foreach (var noun in duplicateNoun)
         {
             Report(jProperty, Diagnostics.PhraseNounDuplicate, noun, key);
-            return null;
         }
 
         var phrase = new LingoPhrase
@@ -265,6 +266,17 @@ public class LingoJsonParser(string filePath) : ILingoJsonParser
                 Report(jProperty.Value[translation.Key]!, Diagnostics.NounIsIncomplete, key, translation.Key);
                 continue;
             }
+
+            if (translation.Value.Any(String.IsNullOrWhiteSpace))
+            {
+                Report(jProperty.Value[translation.Key]!, Diagnostics.UnfinishedDescriptor, "Noun is incomplete");
+            }
+
+            if (translation.Value.Any(x => Char.IsUpper(x[0])))
+            {
+                Report(jProperty.Value[translation.Key]!, Diagnostics.UnfinishedDescriptor, "Noun has a capitalized translation");
+            }
+
 
             singular.Add(translation.Key, translation.Value[0]);
             plural.Add(translation.Key, translation.Value[1]);
