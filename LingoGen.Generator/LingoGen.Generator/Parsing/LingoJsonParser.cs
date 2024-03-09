@@ -45,12 +45,15 @@ public class LingoJsonParser(string filePath) : ILingoJsonParser
 
         ParsePhrases(jObject);
 
+        ParseNouns(jObject);
+
         return new()
         {
             LingoData = _lingoData,
             Diagnostics = _diagnostics
         };
     }
+
 
     private bool ParseMetaData(JObject jObject)
     {
@@ -127,23 +130,23 @@ public class LingoJsonParser(string filePath) : ILingoJsonParser
         }
     }
 
-    private LingoPhrase? ParsePhrase(JProperty property)
+    private LingoPhrase? ParsePhrase(JProperty jProperty)
     {
         Dictionary<string, string> translations;
         try
         {
-            translations = property.Value.ToObject<Dictionary<string, string>>() ?? new();
+            translations = jProperty.Value.ToObject<Dictionary<string, string>>() ?? new();
         }
         catch (Exception e)
         {
-            Report(property.Value, Diagnostics.JsonException, e.Message);
+            Report(jProperty.Value, Diagnostics.JsonException, e.Message);
             return null;
         }
 
-        var key = CreateKey(property);
+        var key = CreateKey(jProperty);
         if (key is null)
         {
-            Report(property, Diagnostics.InvalidJsonFormat, "Key is empty or invalid");
+            Report(jProperty, Diagnostics.InvalidJsonFormat, "Key is empty or invalid");
             return null;
         }
 
@@ -155,18 +158,18 @@ public class LingoJsonParser(string filePath) : ILingoJsonParser
 
         foreach (var missingLanguage in _lingoData.MetaData.Languages.Except(translations.Keys))
         {
-            Report(property.Value, Diagnostics.MissingTranslation, phrase.Key, missingLanguage);
+            Report(jProperty.Value, Diagnostics.MissingTranslation, phrase.Key, missingLanguage);
         }
 
         foreach (var extraLanguage in translations.Keys.Except(_lingoData.MetaData.Languages))
         {
-            Report(property.Value[extraLanguage]!, Diagnostics.ExtraTranslation, phrase.Key, extraLanguage);
+            Report(jProperty.Value[extraLanguage]!, Diagnostics.ExtraTranslation, phrase.Key, extraLanguage);
         }
 
         // Add english translation after checking for missing languages 
-        translations.Add("en", property.Name);
+        translations.Add("en", jProperty.Name);
 
-        foreach (Match match in _argumentRegex.Matches(property.Name))
+        foreach (Match match in _argumentRegex.Matches(jProperty.Name))
         {
             phrase.Arguments.Add(match.Value);
         }
@@ -177,18 +180,93 @@ public class LingoJsonParser(string filePath) : ILingoJsonParser
 
             foreach (var extraArg in translationArgs.Except(phrase.Arguments))
             {
-                Report(property.Value[translation.Key]!, Diagnostics.ExtraArgument, phrase.Key, extraArg, translation);
+                Report(jProperty.Value[translation.Key]!, Diagnostics.ExtraPhraseArgument, phrase.Key, extraArg, translation);
                 return null;
             }
 
             foreach (var missingArg in phrase.Arguments.Except(translationArgs))
             {
                 // Missing argument is an error
-                Report(property.Value[translation.Key]!, Diagnostics.MissingArgument, phrase.Key, missingArg, translation);
+                Report(jProperty.Value[translation.Key]!, Diagnostics.MissingPhraseArgument, phrase.Key, missingArg, translation);
             }
         }
 
         return phrase;
+    }
+
+    private void ParseNouns(JObject jObject)
+    {
+        if (!jObject.TryGetValue<JObject>("nouns", out var nouns))
+        {
+            // TODO: Report?
+            return;
+        }
+
+        // We dont need to check for duplicate keys because JObject will filter them out
+        foreach (var property in nouns.Properties())
+        {
+            var noun = ParseNoun(property);
+            if (noun is not null)
+                _lingoData.Nouns.Add(noun);
+        }
+    }
+
+    private LingoNoun? ParseNoun(JProperty jProperty)
+    {
+        Dictionary<string, string[]> translations;
+        try
+        {
+            translations = jProperty.Value.ToObject<Dictionary<string, string[]>>() ?? new();
+        }
+        catch (Exception e)
+        {
+            Report(jProperty.Value, Diagnostics.JsonException, e.Message);
+            return null;
+        }
+
+        // TODO: What are we going to do with the key
+        // TODO: Validate it?
+        var key = CreateKey(jProperty);
+        if (key is null)
+        {
+            Report(jProperty, Diagnostics.InvalidJsonFormat, "Key is empty or invalid");
+            return null;
+        }
+
+        // Nouns also need to have an english translation
+        var languages = new List<string>(_lingoData.MetaData.Languages) { "en" };
+
+        foreach (var missingLanguage in languages.Except(translations.Keys))
+        {
+            Report(jProperty.Value, Diagnostics.MissingTranslation, key, missingLanguage);
+        }
+
+        foreach (var extraLanguage in translations.Keys.Except(languages))
+        {
+            Report(jProperty.Value[extraLanguage]!, Diagnostics.ExtraTranslation, key, extraLanguage);
+        }
+
+        Dictionary<string, string> singular = new();
+        Dictionary<string, string> plural = new();
+
+        foreach (var translation in translations)
+        {
+            if (translation.Value.Length < 2)
+            {
+                Report(jProperty.Value[translation.Key]!, Diagnostics.NounIsIncomplete, key, translation.Key);
+                continue;
+            }
+
+            singular.Add(translation.Key, translation.Value[0]);
+            plural.Add(translation.Key, translation.Value[1]);
+        }
+
+        return new()
+        {
+            Key = key,
+            Singular = singular,
+            Plural = plural
+        };
     }
 
     private string? CreateKey(JProperty property)

@@ -9,7 +9,7 @@ public static class Diagnostics
         "No lingo.json file found",
         "LingoGen",
         DiagnosticSeverity.Warning, true);
-    
+
     public static readonly DiagnosticDescriptor InvalidLanguage = new("LINGO1001",
         "Invalid language",
         "Invalid language: {0}",
@@ -58,13 +58,13 @@ public static class Diagnostics
         "LingoGen",
         DiagnosticSeverity.Error, true);
 
-    public static readonly DiagnosticDescriptor ExtraArgument = new("LINGO1009",
+    public static readonly DiagnosticDescriptor ExtraPhraseArgument = new("LINGO1009",
         "Extra argument",
         "Phrase '{0}' has an extra argument '{1}' in '{2}'",
         "LingoGen",
         DiagnosticSeverity.Error, true);
 
-    public static readonly DiagnosticDescriptor MissingArgument = new("LINGO1010",
+    public static readonly DiagnosticDescriptor MissingPhraseArgument = new("LINGO1010",
         "Missing argument",
         "Phrase '{0}' is missing an argument for '{1}' in '{2}'",
         "LingoGen",
@@ -72,20 +72,26 @@ public static class Diagnostics
 
     public static readonly DiagnosticDescriptor ExtraTranslation = new("LINGO1011",
         "Extra translation",
-        "Phrase '{0}' has an extra translation for '{1}'",
+        "'{0}' has an extra translation for '{1}'",
         "LingoGen",
         DiagnosticSeverity.Warning, true);
 
     public static readonly DiagnosticDescriptor MissingTranslation = new("LINGO1012",
         "Missing translation",
-        "Phrase '{0}' is missing a translation for '{1}'",
+        "'{0}' is missing a translation for '{1}'",
         "LingoGen",
         DiagnosticSeverity.Error, true);
-    
+
     // TODO: Use this diagnostic
     public static readonly DiagnosticDescriptor PhraseNounDuplicate = new("LINGO1013",
         "There already exists a noun for this phrase",
         "Noun '{0}' has a value for the phrase '{1}'",
+        "LingoGen",
+        DiagnosticSeverity.Error, true);
+    
+    public static readonly DiagnosticDescriptor NounIsIncomplete = new("LINGO1014",
+        "Noun is incomplete",
+        "Noun '{0}' is incomplete for '{1}'",
         "LingoGen",
         DiagnosticSeverity.Error, true);
 }

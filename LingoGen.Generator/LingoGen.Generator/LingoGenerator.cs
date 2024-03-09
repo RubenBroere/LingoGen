@@ -13,6 +13,7 @@ public class LingoGenerator : IIncrementalGenerator
         {
             ctx.AddSource("Lingo.g.cs", Classes.Lingo);
             ctx.AddSource("Lingo.Content.g.cs", Classes.Content);
+            ctx.AddSource("Lingo.Noun.g.cs", Classes.Noun);
         });
 
         // Cache file contents
@@ -65,6 +66,12 @@ public class LingoGenerator : IIncrementalGenerator
         {
             var source = LingoClass.BuildPhrase(phrase);
             ctx.AddSource($"Lingo.Phrase.{phrase.Key}.g.cs", source);
+        }
+
+        foreach (var noun in model.ParserResult.LingoData.Nouns)
+        {
+            var source = LingoClass.BuildNoun(noun);
+            ctx.AddSource($"Lingo.Noun.{noun.Key}.g.cs", source);
         }
     }
 }
